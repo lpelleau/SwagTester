@@ -1,8 +1,10 @@
 package net.pelleau.utils;
 
+import org.junit.Assert;
+
 import net.pelleau.swagger.SwagResponse;
 
-public class SwagResponseAssert {
+public class SwagResponseAssert extends Assert {
 
 	/**
 	 * Test if the statusCode and the body are equals.
@@ -14,8 +16,10 @@ public class SwagResponseAssert {
 	 * @return a boolean indicates if both result have the same statusCode and
 	 *         body.
 	 */
-	public static boolean assertEquals(SwagResponse expected, SwagResponse actual) {
-		return expected.getStatusCode() == actual.getStatusCode() && expected.getBody().equals(actual.getBody());
+	public static void assertEquals(SwagResponse expected, SwagResponse actual) {
+		if (!(expected.getStatusCode() == actual.getStatusCode() && expected.getBody().equals(actual.getBody()))) {
+			fail("Expected : '" + expected.getBody() + "', given : '" + actual.getBody() + "'.");
+		}
 	}
 
 	/**
@@ -27,8 +31,10 @@ public class SwagResponseAssert {
 	 *            the actual value.
 	 * @return a boolean indicates if both reuslt have the same statusCode.
 	 */
-	public static boolean assertStatusCodeEquals(SwagResponse expected, SwagResponse actual) {
-		return expected.getStatusCode() == actual.getStatusCode();
+	public static void assertStatusCodeEquals(SwagResponse expected, SwagResponse actual) {
+		if (!(expected.getStatusCode() == actual.getStatusCode())) {
+			fail("Expected : '" + expected.getStatusCode() + "', given : '" + actual.getStatusCode() + "'.");
+		}
 	}
 
 	/**
@@ -42,8 +48,10 @@ public class SwagResponseAssert {
 	 * @return a boolean indicates if the response's statusCode is equal to the
 	 *         expected value.
 	 */
-	public static boolean assertStatusCodeEquals(int expected, SwagResponse actual) {
-		return expected == actual.getStatusCode();
+	public static void assertStatusCodeEquals(int expected, SwagResponse actual) {
+		if (!(expected == actual.getStatusCode())) {
+			fail("Expected : '" + expected + "', given : '" + actual.getStatusCode() + "'.");
+		}
 	}
 
 }

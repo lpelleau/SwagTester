@@ -1,5 +1,11 @@
 package swagger;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.stream.Collectors;
+
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +34,7 @@ public class TestSwagResponse {
 	}
 
 	@Test
-	public void testBodyValues() throws UnirestException {
+	public void testBodyValues() throws UnirestException, IOException, URISyntaxException {
 		long begin = System.currentTimeMillis();
 		HttpResponse<String> response = Unirest.get("http://petstore.swagger.io/v2/pet/4").asString();
 		long elapsed = System.currentTimeMillis() - begin;
@@ -36,8 +42,29 @@ public class TestSwagResponse {
 		SwagResponse swag = new SwagResponse(response, elapsed);
 
 		SwagResponse expected = new SwagResponse(elapsed);
-		expected.setBody(
-				"{\"id\":4,\"category\":{\"id\":0,\"name\":\"test\"},\"name\":\"doggie\",\"photoUrls\":[\"string\"],\"tags\":[{\"id\":0,\"name\":\"string\"}],\"status\":\"available\"}");
+		expected.setStatusCode(200);
+		expected.setBody(Files
+				.readAllLines(Paths
+						.get(TestSwagResponse.class.getClassLoader().getResource("expected_result_1.json").toURI()))
+				.stream().collect(Collectors.joining("\n")));
+
+		SwagResponseAssert.assertEquals(expected, swag);
+	}
+
+	@Test
+	public void testBodyValues2() throws UnirestException, IOException, URISyntaxException {
+		long begin = System.currentTimeMillis();
+		HttpResponse<String> response = Unirest.get("http://petstore.swagger.io/v2/pet/1").asString();
+		long elapsed = System.currentTimeMillis() - begin;
+
+		SwagResponse swag = new SwagResponse(response, elapsed);
+
+		SwagResponse expected = new SwagResponse(elapsed);
+		expected.setStatusCode(200);
+		expected.setBody(Files
+				.readAllLines(Paths
+						.get(TestSwagResponse.class.getClassLoader().getResource("expected_result_2.json").toURI()))
+				.stream().collect(Collectors.joining("\n")));
 
 		SwagResponseAssert.assertEquals(expected, swag);
 	}
