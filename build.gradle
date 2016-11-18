@@ -53,6 +53,10 @@ dependencies {
 	// apache commons-lang (random string)
 	compile group: 'commons-lang', name: 'commons-lang', version: '2.6'
 	
+	// log
+	compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.21'
+	compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.21'
+	
 	// junit
 	testCompile group: 'junit', name: 'junit', version: '4.+'
 }

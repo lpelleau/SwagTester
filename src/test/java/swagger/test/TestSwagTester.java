@@ -1,6 +1,9 @@
 package swagger.test;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.io.File;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -15,8 +18,15 @@ public class TestSwagTester {
 
 	@Before
 	public void initialize() {
-		String pathFile = TestSwagTester.class.getClassLoader().getResource(file).getPath();
-		swagger = new SwagTester(pathFile);
+		// System.setProperty("debugParser", "true");
+
+		try {
+			String pathFile = new File(TestSwagTester.class.getClassLoader().getResource(file).getPath())
+					.getAbsolutePath();
+			swagger = new SwagTester(pathFile);
+		} catch (Exception e) {
+			fail(e.getMessage());
+		}
 	}
 
 	@Test

@@ -16,14 +16,20 @@ public class SwagTester {
 
 	private String host;
 
-	public SwagTester(String pathToJsonFile) {
+	public SwagTester(String pathToJsonFile) throws Exception {
 		swagger = new SwaggerParser().read(pathToJsonFile);
 
-		host = swagger.getSchemes().get(0).name().toLowerCase() + "://" + swagger.getHost() + swagger.getBasePath();
+		if (swagger != null) {
 
-		System.out.println(host);
+			host = swagger.getSchemes().get(0).name().toLowerCase() + "://" + swagger.getHost() + swagger.getBasePath();
 
-		getEntryPoints();
+			System.out.println(host);
+
+			getEntryPoints();
+
+		} else {
+			throw new Exception("Error, unable to read the Json file at : " + pathToJsonFile);
+		}
 	}
 
 	private void getEntryPoints() {
