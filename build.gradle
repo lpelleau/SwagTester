@@ -40,8 +40,17 @@ repositories {
 // In this section you declare the dependencies for your production and test code
 
 dependencies {
+	// swagger
 	compile group: 'io.swagger', name: 'swagger-parser', version: '1.0.+'
 	
+	// unirest
+	compile group : 'com.mashape.unirest', name: 'unirest-java', version: '1.4.9'	
+	compile group : 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.2'
+	compile group : 'org.apache.httpcomponents', name: 'httpasyncclient', version: '4.1.2'	
+	compile group : 'org.apache.httpcomponents', name: 'httpmime', version: '4.5.2'	
+	compile group : 'org.json', name: 'json', version: '1.5-20090211'
+	
+	// junit
 	testCompile group: 'junit', name: 'junit', version: '4.+'
 }
 
