@@ -10,11 +10,13 @@ import net.pelleau.swagger.methods.Method;
 
 class EntryPointImpl implements EntryPoint {
 
+	private SwagTester swag;
 	private String name;
 	private Path path;
-	Map<io.swagger.models.HttpMethod, Method> methods;
+	Map<HttpMethod, Method> methods;
 
-	public EntryPointImpl(String name, Path path) {
+	public EntryPointImpl(SwagTester swag, String name, Path path) {
+		this.swag = swag;
 		this.name = name;
 		this.path = path;
 		methods = new HashMap<>();
@@ -22,7 +24,7 @@ class EntryPointImpl implements EntryPoint {
 
 	private Method getMethod(HttpMethod httpMethod) {
 		if (!methods.containsKey(httpMethod)) {
-			Method method = new GetMethod(path.getOperationMap().get(httpMethod));
+			Method method = new GetMethod(swag, name, path.getOperationMap().get(httpMethod));
 			methods.put(httpMethod, method);
 		}
 
