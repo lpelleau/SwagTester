@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -61,10 +62,9 @@ public class TestSwagTester {
 			SwagTester crapSwagger = new SwagTester(crapPathFile);
 
 			assertFalse(crapSwagger.serverUpTest());
-		} catch (Exception e) {
+		} catch (FileNotFoundException e) {
 			fail(e.getMessage());
 		}
-
 	}
 
 	@Test

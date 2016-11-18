@@ -12,6 +12,7 @@ import com.mashape.unirest.request.HttpRequest;
 import io.swagger.models.HttpMethod;
 import io.swagger.models.Operation;
 import net.pelleau.swagger.SwagTester;
+import net.pelleau.utils.RandomGenerator;
 
 public abstract class Method {
 
@@ -31,7 +32,63 @@ public abstract class Method {
 
 	protected void genericTest(TestType testType) {
 		try {
-			String endPoint = swag.getHost() + (name.replace("{petId}", "4"));
+			String endPoint = swag.getHost();
+
+			String params[] = name.split("/");
+			for (int i = 0; i < params.length; ++i) {
+
+				switch (testType) {
+				default:
+				case VALID:
+					// If the parameter contains the characters "id", We
+					// consider the API require an integer
+					if (name.contains("Id") || name.contains("id")) {
+						int id = RandomGenerator.getInt(Integer.MAX_VALUE);
+						params[i] = params[i].replaceAll("\\{[a-zA-x]+\\}", String.valueOf(id));
+
+					} else {
+						String str = RandomGenerator.getString(RandomGenerator.getInt(200));
+						params[i] = params[i].replaceAll("\\{[a-zA-x]+\\}", str);
+					}
+					break;
+
+				case EXTREME_VALUES:
+					// If the parameter contains the characters "id", We
+					// consider the API require an integer
+					if (name.contains("Id") || name.contains("id")) {
+						int id = 0;
+						if (RandomGenerator.getInt(2) == 0) {
+							id = Integer.MAX_VALUE;
+						}
+						params[i] = params[i].replaceAll("\\{[a-zA-x]+\\}", String.valueOf(id));
+
+					} else {
+						String str = "";
+						if (RandomGenerator.getInt(2) == 0) {
+							str = RandomGenerator.getString(RandomGenerator.getInt(500));
+						}
+						params[i] = params[i].replaceAll("\\{[a-zA-x]+\\}", str);
+					}
+					break;
+
+				case INVALID:
+					String str = null;
+
+					if (RandomGenerator.getInt(2) == 0) {
+						str = RandomGenerator.getString(RandomGenerator.getInt(500));
+
+					} else {
+						str = String.valueOf(RandomGenerator.getInt(Integer.MAX_VALUE) * -1);
+					}
+
+					params[i] = params[i].replaceAll("\\{[a-zA-x]+\\}", str);
+					break;
+				}
+
+				endPoint += params[i] + "/";
+			}
+
+			System.out.println(endPoint);
 
 			log.debug("Requesting : " + endPoint);
 
@@ -67,6 +124,8 @@ public abstract class Method {
 				}
 			}
 
+			// TODO Insert body here
+
 			HttpResponse<JsonNode> response = request.asJson();
 
 			log.debug(response.getBody().toString());
@@ -79,7 +138,8 @@ public abstract class Method {
 		genericTest(TestType.VALID);
 	}
 
-	public void timeoutTest() {
+	public void timeoutTest(long milliseconds) {
+		// TODO Insert timeout here
 		genericTest(TestType.TIMEOUT);
 	}
 
@@ -92,6 +152,7 @@ public abstract class Method {
 	}
 
 	public void scalingTest() {
+		// TODO Insert threads here
 		genericTest(TestType.SCALLING);
 	}
 }

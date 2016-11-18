@@ -1,5 +1,6 @@
 package net.pelleau.swagger;
 
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,7 +24,7 @@ public class SwagTester {
 
 	private String host;
 
-	public SwagTester(String pathToJsonFile) throws Exception {
+	public SwagTester(String pathToJsonFile) throws FileNotFoundException {
 		swagger = new SwaggerParser().read(pathToJsonFile);
 
 		if (swagger != null) {
@@ -36,7 +37,7 @@ public class SwagTester {
 			getEntryPoints();
 
 		} else {
-			throw new Exception("Error, unable to read the Json file at : " + pathToJsonFile);
+			throw new FileNotFoundException("Error, unable to read the Json file at : " + pathToJsonFile);
 		}
 	}
 
