@@ -1,9 +1,10 @@
 package net.pelleau.swagger;
 
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.Unirest;
 
 import io.swagger.models.Scheme;
 import io.swagger.models.Swagger;
@@ -61,15 +62,25 @@ public class SwagTester {
 		// reachable =
 		// InetAddress.getByName(swagger.getHost()).isReachable(milliseconds);
 
-		String url = "://" + swagger.getHost() + swagger.getBasePath();
+		String url = "://" + swagger.getHost();
 		for (Scheme schemes : swagger.getSchemes()) {
 			try {
-				URL currentUrl = new URL(schemes.toValue() + url);
+				System.out.println(schemes.toValue() + url);
 
-				HttpURLConnection urlConnect = (HttpURLConnection) currentUrl.openConnection();
+				HttpResponse<String> response = Unirest.head(schemes.toValue() + url).asString();
 
-				@SuppressWarnings("unused")
-				Object objData = urlConnect.getContent();
+				System.out.println(response.getStatus());
+				System.out.println(response.getStatusText());
+				System.out.println(response.getHeaders());
+				System.out.println(response.getRawBody());
+
+				// URL currentUrl = new URL(schemes.toValue() + url);
+
+				// HttpURLConnection urlConnect = (HttpURLConnection)
+				// currentUrl.openConnection();
+
+				// @SuppressWarnings("unused")
+				// Object objData = urlConnect.getContent();
 			} catch (Exception e) {
 				reachable = false;
 			}
