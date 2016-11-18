@@ -7,7 +7,9 @@ import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import com.mashape.unirest.request.HttpRequest;
 
+import io.swagger.models.HttpMethod;
 import io.swagger.models.Operation;
 import net.pelleau.swagger.SwagTester;
 
@@ -25,42 +27,71 @@ public abstract class Method {
 		this.operation = operation;
 	}
 
-	public void validTest() {
+	protected abstract HttpMethod getHttpMethod();
 
+	protected void genericTest(TestType testType) {
 		try {
 			String endPoint = swag.getHost() + (name.replace("{petId}", "4"));
 
 			log.debug("Requesting : " + endPoint);
 
-			HttpResponse<JsonNode> response = Unirest.get(endPoint).header("accept", "application/json").asJson();
+			HttpRequest request = null;
 
-			log.debug(response.getStatus() + " : " + response.getStatusText());
+			switch (getHttpMethod()) {
+			case GET:
+				request = Unirest.get(endPoint);
+				break;
+			case POST:
+				request = Unirest.post(endPoint);
+				break;
+			case PUT:
+				request = Unirest.put(endPoint);
+				break;
+			case DELETE:
+				request = Unirest.delete(endPoint);
+				break;
+			case HEAD:
+				request = Unirest.head(endPoint);
+				break;
+			case OPTIONS:
+				request = Unirest.options(endPoint);
+				break;
+			case PATCH:
+				request = Unirest.patch(endPoint);
+				break;
+			}
+
+			if (operation.getConsumes() != null) {
+				for (String app : operation.getConsumes()) {
+					request.header("accept", app);
+				}
+			}
+
+			HttpResponse<JsonNode> response = request.asJson();
+
 			log.debug(response.getBody().toString());
-
 		} catch (UnirestException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
 
+	public void validTest() {
+		genericTest(TestType.VALID);
 	}
 
 	public void timeoutTest() {
-		// TODO Auto-generated method stub
-
+		genericTest(TestType.TIMEOUT);
 	}
 
 	public void extremValuesTest() {
-		// TODO Auto-generated method stub
-
+		genericTest(TestType.EXTREME_VALUES);
 	}
 
 	public void invalidTest() {
-		// TODO Auto-generated method stub
-
+		genericTest(TestType.INVALID);
 	}
 
 	public void scalingTest() {
-		// TODO Auto-generated method stub
-
+		genericTest(TestType.SCALLING);
 	}
 }

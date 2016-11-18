@@ -1,4 +1,4 @@
-package swagger.test;
+package swagger;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -38,12 +38,10 @@ public class TestSwagTester {
 
 	@Before
 	public void initialize() {
-		// System.setProperty("debugParser", "true");
-
 		try {
-			String pathFile = new File(TestSwagTester.class.getClassLoader().getResource(file).getPath())
-					.getAbsolutePath();
-			swagger = new SwagTester(pathFile);
+			File pathFile = new File(TestSwagTester.class.getClassLoader().getResource(file).getPath());
+
+			swagger = new SwagTester(pathFile.getAbsolutePath());
 		} catch (Exception e) {
 			fail(e.getMessage());
 		}
@@ -70,11 +68,7 @@ public class TestSwagTester {
 	}
 
 	@Test
-	public void main() {
-		swagger.entryPoints().forEach((name, ep) -> {
-			log.debug(name);
-		});
-
+	public void testGetPet() {
 		swagger.entryPoint("/pet/{petId}").getMethod().validTest();
 	}
 }

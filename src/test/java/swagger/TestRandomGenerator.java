@@ -1,4 +1,4 @@
-package utils.test;
+package swagger;
 
 import org.junit.Test;
 
