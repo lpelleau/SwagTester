@@ -1,5 +1,9 @@
 package net.pelleau.swagger.methods;
 
-public class HeadMethod extends HttpMethod {
+import io.swagger.models.Operation;
 
+public class HeadMethod extends Method {
+	public HeadMethod(Operation operation) {
+		super(operation);
+	}
 }

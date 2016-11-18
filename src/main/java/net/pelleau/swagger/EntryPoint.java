@@ -1,19 +1,19 @@
 package net.pelleau.swagger;
 
-import net.pelleau.swagger.methods.HttpMethod;
+import net.pelleau.swagger.methods.Method;
 
 public interface EntryPoint {
-	public HttpMethod get();
+	public Method getMethod();
 
-	public HttpMethod post();
+	public Method postMethod();
 
-	public HttpMethod put();
+	public Method putMethod();
 
-	public HttpMethod patch();
+	public Method patchMethod();
 
-	public HttpMethod delete();
+	public Method deleteMethod();
 
-	public HttpMethod head();
+	public Method headMethod();
 
-	public HttpMethod options();
+	public Method optionsMethod();
 }

@@ -1,6 +1,15 @@
 package net.pelleau.swagger.methods;
 
-public abstract class HttpMethod {
+import io.swagger.models.Operation;
+
+public abstract class Method {
+
+	private Operation operation;
+
+	public Method(Operation operation) {
+		this.operation = operation;
+	}
+
 	public void validTest() {
 		// TODO Auto-generated method stub
 

@@ -1,7 +1,7 @@
 package net.pelleau.swagger;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import io.swagger.models.Swagger;
 import io.swagger.parser.SwaggerParser;
@@ -9,7 +9,7 @@ import io.swagger.parser.SwaggerParser;
 public class SwagTester {
 
 	private Swagger swagger;
-	private List<EntryPoint> entryPoints;
+	private Map<String, EntryPoint> entryPoints;
 
 	public SwagTester(String pathToJsonFile) {
 		swagger = new SwaggerParser().read(pathToJsonFile);
@@ -18,12 +18,20 @@ public class SwagTester {
 	}
 
 	private void getEntryPoints() {
-		entryPoints = new ArrayList<>();
-		// TODO Auto-generated method stub
+		entryPoints = new HashMap<>();
+
+		swagger.getPaths().forEach((name, path) -> {
+			EntryPoint ep = new EntryPointImpl(name, path);
+			entryPoints.put(name, ep);
+		});
 	}
 
-	public List<EntryPoint> entryPoints() {
+	public Map<String, EntryPoint> entryPoints() {
 		return entryPoints;
+	}
+
+	public EntryPoint entryPoint(String name) {
+		return entryPoints.get(name);
 	}
 
 	public void serverUpTest() {

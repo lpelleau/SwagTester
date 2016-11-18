@@ -1,5 +1,9 @@
 package net.pelleau.swagger.methods;
 
-public class PostMethod extends HttpMethod {
+import io.swagger.models.Operation;
 
+public class PostMethod extends Method {
+	public PostMethod(Operation operation) {
+		super(operation);
+	}
 }

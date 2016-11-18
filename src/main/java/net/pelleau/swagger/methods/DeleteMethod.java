@@ -1,5 +1,9 @@
 package net.pelleau.swagger.methods;
 
-public class DeleteMethod extends HttpMethod {
+import io.swagger.models.Operation;
 
+public class DeleteMethod extends Method {
+	public DeleteMethod(Operation operation) {
+		super(operation);
+	}
 }

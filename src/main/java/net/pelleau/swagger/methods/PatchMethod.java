@@ -1,5 +1,9 @@
 package net.pelleau.swagger.methods;
 
-public class PatchMethod extends HttpMethod {
+import io.swagger.models.Operation;
 
+public class PatchMethod extends Method {
+	public PatchMethod(Operation operation) {
+		super(operation);
+	}
 }

@@ -1,49 +1,67 @@
 package net.pelleau.swagger;
 
-import net.pelleau.swagger.methods.HttpMethod;
+import java.util.HashMap;
+import java.util.Map;
+
+import io.swagger.models.HttpMethod;
+import io.swagger.models.Path;
+import net.pelleau.swagger.methods.GetMethod;
+import net.pelleau.swagger.methods.Method;
 
 class EntryPointImpl implements EntryPoint {
 
-	@Override
-	public HttpMethod get() {
-		// TODO Auto-generated method stub
-		return null;
+	private String name;
+	private Path path;
+	Map<io.swagger.models.HttpMethod, Method> methods;
+
+	public EntryPointImpl(String name, Path path) {
+		this.name = name;
+		this.path = path;
+		methods = new HashMap<>();
+	}
+
+	private Method getMethod(HttpMethod httpMethod) {
+		if (!methods.containsKey(httpMethod)) {
+			Method method = new GetMethod(path.getOperationMap().get(httpMethod));
+			methods.put(httpMethod, method);
+		}
+
+		return methods.get(httpMethod);
 	}
 
 	@Override
-	public HttpMethod post() {
-		// TODO Auto-generated method stub
-		return null;
+	public Method getMethod() {
+		return getMethod(HttpMethod.GET);
 	}
 
 	@Override
-	public HttpMethod put() {
-		// TODO Auto-generated method stub
-		return null;
+	public Method postMethod() {
+		return getMethod(HttpMethod.POST);
 	}
 
 	@Override
-	public HttpMethod patch() {
-		// TODO Auto-generated method stub
-		return null;
+	public Method putMethod() {
+		return getMethod(HttpMethod.PUT);
 	}
 
 	@Override
-	public HttpMethod delete() {
-		// TODO Auto-generated method stub
-		return null;
+	public Method patchMethod() {
+		return getMethod(HttpMethod.PATCH);
 	}
 
 	@Override
-	public HttpMethod head() {
-		// TODO Auto-generated method stub
-		return null;
+	public Method deleteMethod() {
+		return getMethod(HttpMethod.DELETE);
 	}
 
 	@Override
-	public HttpMethod options() {
-		// TODO Auto-generated method stub
-		return null;
+	public Method headMethod() {
+		return getMethod(HttpMethod.HEAD);
+	}
+
+	@Override
+	public Method optionsMethod() {
+		return getMethod(HttpMethod.OPTIONS);
 	}
 
 }

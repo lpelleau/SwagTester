@@ -1,5 +1,9 @@
 package net.pelleau.swagger.methods;
 
-public class PutMethod extends HttpMethod {
+import io.swagger.models.Operation;
 
+public class PutMethod extends Method {
+	public PutMethod(Operation operation) {
+		super(operation);
+	}
 }

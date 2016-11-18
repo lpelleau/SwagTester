@@ -1,5 +1,9 @@
 package net.pelleau.swagger.methods;
 
-public class OptionMethod extends HttpMethod {
+import io.swagger.models.Operation;
 
+public class OptionMethod extends Method {
+	public OptionMethod(Operation operation) {
+		super(operation);
+	}
 }
