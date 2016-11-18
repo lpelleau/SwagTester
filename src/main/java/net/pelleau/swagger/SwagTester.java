@@ -1,11 +1,11 @@
 package net.pelleau.swagger;
 
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.swagger.models.Scheme;
 import io.swagger.models.Swagger;
 import io.swagger.parser.SwaggerParser;
 
@@ -45,15 +45,24 @@ public class SwagTester {
 	 * @return true if the server is UP
 	 */
 	public boolean serverUpTest(int milliseconds) {
-		String host = "";
-		boolean reachable = false;
-		try {
-			reachable = InetAddress.getByName(host).isReachable(milliseconds);
-		} catch (UnknownHostException e) {
-			return false;
-		} catch (IOException e) {
-			return false;
+		boolean reachable = true;
+		// reachable =
+		// InetAddress.getByName(swagger.getHost()).isReachable(milliseconds);
+
+		String url = "://" + swagger.getHost() + swagger.getBasePath();
+		for (Scheme schemes : swagger.getSchemes()) {
+			try {
+				URL currentUrl = new URL(schemes.toValue() + url);
+
+				HttpURLConnection urlConnect = (HttpURLConnection) currentUrl.openConnection();
+
+				@SuppressWarnings("unused")
+				Object objData = urlConnect.getContent();
+			} catch (Exception e) {
+				reachable = false;
+			}
 		}
+
 		return reachable;
 	}
 
