@@ -1,5 +1,8 @@
 package net.pelleau.swagger.methods;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
@@ -9,6 +12,8 @@ import io.swagger.models.Operation;
 import net.pelleau.swagger.SwagTester;
 
 public abstract class Method {
+
+	private static Logger log = LoggerFactory.getLogger(Method.class);
 
 	private SwagTester swag;
 	private String name;
@@ -25,12 +30,12 @@ public abstract class Method {
 		try {
 			String endPoint = swag.getHost() + (name.replace("{petId}", "4"));
 
-			System.out.println("Requesting : " + endPoint);
+			log.debug("Requesting : " + endPoint);
 
 			HttpResponse<JsonNode> response = Unirest.get(endPoint).header("accept", "application/json").asJson();
 
-			System.out.println(response.getStatus() + " : " + response.getStatusText());
-			System.out.println(response.getBody());
+			log.debug(response.getStatus() + " : " + response.getStatusText());
+			log.debug(response.getBody().toString());
 
 		} catch (UnirestException e) {
 			// TODO Auto-generated catch block

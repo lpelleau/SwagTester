@@ -3,14 +3,20 @@ package net.pelleau.swagger;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
 
 import io.swagger.models.Scheme;
 import io.swagger.models.Swagger;
 import io.swagger.parser.SwaggerParser;
 
 public class SwagTester {
+
+	private static Logger log = LoggerFactory.getLogger(SwagTester.class);
 
 	private Swagger swagger;
 	private Map<String, EntryPoint> entryPoints;
@@ -24,7 +30,7 @@ public class SwagTester {
 
 			host = swagger.getSchemes().get(0).name().toLowerCase() + "://" + swagger.getHost() + swagger.getBasePath();
 
-			System.out.println(host);
+			log.debug("Host : " + host);
 
 			getEntryPoints();
 
@@ -53,50 +59,27 @@ public class SwagTester {
 	/**
 	 * Test if the server is UP with a simple Ping.
 	 * 
-	 * @param milliseconds
-	 *            - Time in milliseconds before timeout
 	 * @return true if the server is UP
 	 */
-	public boolean serverUpTest(int milliseconds) {
+	public boolean serverUpTest() {
 		boolean reachable = true;
-		// reachable =
-		// InetAddress.getByName(swagger.getHost()).isReachable(milliseconds);
 
 		String url = "://" + swagger.getHost();
 		for (Scheme schemes : swagger.getSchemes()) {
 			try {
-				System.out.println(schemes.toValue() + url);
+				log.debug(schemes.toValue() + url);
 
 				HttpResponse<String> response = Unirest.head(schemes.toValue() + url).asString();
 
-				System.out.println(response.getStatus());
-				System.out.println(response.getStatusText());
-				System.out.println(response.getHeaders());
-				System.out.println(response.getRawBody());
-
-				// URL currentUrl = new URL(schemes.toValue() + url);
-
-				// HttpURLConnection urlConnect = (HttpURLConnection)
-				// currentUrl.openConnection();
-
-				// @SuppressWarnings("unused")
-				// Object objData = urlConnect.getContent();
-			} catch (Exception e) {
+				if (response.getStatus() != 200) {
+					reachable = false;
+				}
+			} catch (UnirestException e) {
 				reachable = false;
 			}
 		}
 
 		return reachable;
-	}
-
-	/**
-	 * Test if the server is UP with a simple Ping.<br>
-	 * Timeout of 5 seconds.
-	 * 
-	 * @return true if the server is UP
-	 */
-	public boolean serverUpTest() {
-		return serverUpTest(5000);
 	}
 
 	/**
