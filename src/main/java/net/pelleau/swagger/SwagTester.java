@@ -1,5 +1,8 @@
 package net.pelleau.swagger;
 
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,28 +37,33 @@ public class SwagTester {
 		return entryPoints.get(name);
 	}
 
-	public void serverUpTest() {
-		// TODO Auto-generated method stub
-
+	/**
+	 * Test if the server is UP with a simple Ping.
+	 * 
+	 * @param milliseconds
+	 *            - Time in milliseconds before timeout
+	 * @return true if the server is UP
+	 */
+	public boolean serverUpTest(int milliseconds) {
+		String host = "";
+		boolean reachable = false;
+		try {
+			reachable = InetAddress.getByName(host).isReachable(milliseconds);
+		} catch (UnknownHostException e) {
+			return false;
+		} catch (IOException e) {
+			return false;
+		}
+		return reachable;
 	}
 
-	public void test() {
-		// swagger.getPaths().entrySet().forEach(entry -> {
-		// System.out.println(entry.toString());
-		// entry.getValue().getOperations().forEach(o -> {
-		// o.getParameters().forEach(p -> {
-		// if (p.getClass().equals(PathParameter.class)) {
-		// try {
-		// AbstractSerializableParameter<PathParameter> asp =
-		// (AbstractSerializableParameter<PathParameter>) p;
-		// System.out.println(asp.getType());
-		// } catch (Exception e) {
-		// }
-		// }
-		// });
-		// });
-		// ;
-		// });
+	/**
+	 * Test if the server is UP with a simple Ping.<br>
+	 * Timeout of 5 seconds.
+	 * 
+	 * @return true if the server is UP
+	 */
+	public boolean serverUpTest() {
+		return serverUpTest(5000);
 	}
-
 }
