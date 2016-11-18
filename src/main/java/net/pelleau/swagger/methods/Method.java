@@ -11,6 +11,7 @@ import com.mashape.unirest.request.HttpRequest;
 
 import io.swagger.models.HttpMethod;
 import io.swagger.models.Operation;
+import io.swagger.models.parameters.Parameter;
 import net.pelleau.swagger.SwagTester;
 import net.pelleau.utils.RandomGenerator;
 
@@ -88,7 +89,15 @@ public abstract class Method {
 				endPoint += params[i] + "/";
 			}
 
-			System.out.println(endPoint);
+			if (operation.getParameters() != null) {
+				for (Parameter param : operation.getParameters()) {
+					if (param.getIn().equals("query")) {
+						// TODO Generate val with expected (or not) type
+						String val = "";
+						endPoint += val;
+					}
+				}
+			}
 
 			log.debug("Requesting : " + endPoint);
 
@@ -124,7 +133,26 @@ public abstract class Method {
 				}
 			}
 
+			if (operation.getParameters() != null) {
+				for (Parameter param : operation.getParameters()) {
+					if (param.getIn().equals("header")) {
+						// TODO Generate val with expected (or not) type
+						String val = "";
+						request.header(param.getName(), val);
+					}
+				}
+			}
+
 			// TODO Insert body here
+			if (operation.getParameters() != null) {
+				for (Parameter param : operation.getParameters()) {
+					if (param.getIn().equals("body")) {
+						// TODO Generate val with expected (or not) type
+						// get Schema -> is array ? -> get ref -> fill with
+						// Random
+					}
+				}
+			}
 
 			HttpResponse<JsonNode> response = request.asJson();
 
