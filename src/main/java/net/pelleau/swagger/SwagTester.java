@@ -14,8 +14,14 @@ public class SwagTester {
 	private Swagger swagger;
 	private Map<String, EntryPoint> entryPoints;
 
+	private String host;
+
 	public SwagTester(String pathToJsonFile) {
 		swagger = new SwaggerParser().read(pathToJsonFile);
+
+		host = swagger.getSchemes().get(0).name().toLowerCase() + "://" + swagger.getHost() + swagger.getBasePath();
+
+		System.out.println(host);
 
 		getEntryPoints();
 	}
@@ -24,7 +30,7 @@ public class SwagTester {
 		entryPoints = new HashMap<>();
 
 		swagger.getPaths().forEach((name, path) -> {
-			EntryPoint ep = new EntryPointImpl(name, path);
+			EntryPoint ep = new EntryPointImpl(this, name, path);
 			entryPoints.put(name, ep);
 		});
 	}
@@ -74,5 +80,14 @@ public class SwagTester {
 	 */
 	public boolean serverUpTest() {
 		return serverUpTest(5000);
+	}
+
+	/**
+	 * Return the base URL of the current server.
+	 * 
+	 * @return
+	 */
+	public String getHost() {
+		return host;
 	}
 }

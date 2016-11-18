@@ -24,4 +24,13 @@ public class TestSwagTester {
 		assertTrue(swagger.serverUpTest());
 		assertTrue(swagger.serverUpTest(5000));
 	}
+
+	@Test
+	public void main() {
+		swagger.entryPoints().forEach((name, ep) -> {
+			System.out.println(name);
+		});
+
+		swagger.entryPoint("/pet/{petId}").getMethod().validTest();
+	}
 }
