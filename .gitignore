@@ -1,5 +1,8 @@
 # Created by https://www.gitignore.io/api/eclipse,gradle,java
 
+# Custom logger config file
+simplelogger.properties
+
 ### Eclipse ###
 
 .metadata
