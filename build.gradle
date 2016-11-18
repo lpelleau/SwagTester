@@ -50,6 +50,9 @@ dependencies {
 	compile group : 'org.apache.httpcomponents', name: 'httpmime', version: '4.5.2'	
 	compile group : 'org.json', name: 'json', version: '1.5-20090211'
 	
+	// apache commons-lang (random string)
+	compile group: 'commons-lang', name: 'commons-lang', version: '2.6'
+	
 	// junit
 	testCompile group: 'junit', name: 'junit', version: '4.+'
 }
