@@ -1,7 +1,6 @@
 package net.pelleau.utils;
 
 import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.Random;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -13,6 +12,10 @@ public class RandomGenerator {
 	private static Random rng = new Random();
 
 	private RandomGenerator() {
+	}
+
+	public static void setSeed(long seed) {
+		rng = new Random(seed);
 	}
 
 	/**
@@ -56,7 +59,7 @@ public class RandomGenerator {
 	 * @return a random String of length size with only alphabetic characters.
 	 */
 	public static String getString(int length) {
-		return RandomStringUtils.randomAlphabetic(length);
+		return RandomStringUtils.random(length, 0, 0, true, false, null, rng);
 	}
 
 	/**
@@ -70,7 +73,17 @@ public class RandomGenerator {
 	 *         the given charSet.
 	 */
 	public static String getString(int length, String charSet) {
-		return RandomStringUtils.random(length, charSet);
+		return RandomStringUtils.random(length, 0, 0, true, false, charSet.toCharArray(), rng);
+	}
+
+	/**
+	 * 
+	 * @param length
+	 *            the length of the returned numeric string.
+	 * @return a random String with only length numerical characters.
+	 */
+	public static String getNumericString(int length) {
+		return RandomStringUtils.random(length, 0, 0, false, true, null, rng);
 	}
 
 	/**
@@ -87,9 +100,8 @@ public class RandomGenerator {
 	 *         "1970-01-01T00:00:00.001Z") format.
 	 */
 	public static String getDateTime() {
-		return RandomStringUtils.randomNumeric(4) + "-" + RandomStringUtils.randomNumeric(2) + "-"
-				+ RandomStringUtils.randomNumeric(2) + "T" + rng.nextInt(25) + ":" + rng.nextInt(61) + ":"
-				+ rng.nextInt(61) + "." + RandomStringUtils.randomNumeric(3) + "Z";
+		return getNumericString(4) + "-" + getNumericString(2) + "-" + getNumericString(2) + "T" + rng.nextInt(25) + ":"
+				+ rng.nextInt(61) + ":" + rng.nextInt(61) + "." + getNumericString(3) + "Z";
 	}
 
 	/**

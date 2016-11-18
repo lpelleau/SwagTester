@@ -17,6 +17,7 @@ import net.pelleau.swagger.SwagTester;
 
 public class TestSwagTester {
 
+	@SuppressWarnings("unused")
 	private static Logger log = LoggerFactory.getLogger(TestSwagTester.class);
 
 	private static final String file = "petstore.json";
