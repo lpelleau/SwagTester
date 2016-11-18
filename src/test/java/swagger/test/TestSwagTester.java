@@ -8,8 +8,7 @@ public class TestSwagTester {
 
 	@Test
 	public void testLib() {
-		SwagTester test = new SwagTester(TestSwagTester.class.getClassLoader().getResource("petstore.json").getPath());
-
-		test.test();
+		String pathFile = TestSwagTester.class.getClassLoader().getResource("petstore.json").getPath();
+		SwagTester test = new SwagTester(pathFile);
 	}
 }
