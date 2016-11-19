@@ -6,6 +6,9 @@ import net.pelleau.swagger.SwagResponse;
 
 public class SwagResponseAssert extends Assert {
 
+	private SwagResponseAssert() {
+	}
+
 	/**
 	 * Test if the statusCode and the body are equals.
 	 * 

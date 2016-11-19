@@ -13,6 +13,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import net.pelleau.swagger.SwagResponse;
 import net.pelleau.swagger.SwagTester;
 
 public class TestSwagTester {
@@ -77,6 +78,8 @@ public class TestSwagTester {
 
 	@Test
 	public void testGetPet() {
-		swagger.entryPoint("/pet/{petId}").getMethod().validTest();
+		SwagResponse response = swagger.entryPoint("/pet/{petId}").getMethod().validTest();
+
+		log.debug(response.toString());
 	}
 }

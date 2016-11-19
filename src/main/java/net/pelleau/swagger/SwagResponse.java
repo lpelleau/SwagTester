@@ -59,4 +59,12 @@ public class SwagResponse {
 	public long getResponseTime() {
 		return responseTime;
 	}
+
+	@Override
+	public String toString() {
+		return "SwagResponse [\n\tstatusCode=" + statusCode + ", \n\tstatusText=" + statusText + ", \n\theader=" + header
+				+ ", \n\tbody=" + body + ", \n\tresponseTime=" + responseTime + "\n]";
+	}
+	
+	
 }

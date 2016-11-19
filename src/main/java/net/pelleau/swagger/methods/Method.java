@@ -12,6 +12,7 @@ import com.mashape.unirest.request.HttpRequest;
 import io.swagger.models.HttpMethod;
 import io.swagger.models.Operation;
 import io.swagger.models.parameters.Parameter;
+import net.pelleau.swagger.SwagResponse;
 import net.pelleau.swagger.SwagTester;
 import net.pelleau.utils.RandomGenerator;
 
@@ -31,7 +32,7 @@ public abstract class Method {
 
 	protected abstract HttpMethod getHttpMethod();
 
-	protected void genericTest(TestType testType) {
+	protected SwagResponse genericTest(TestType testType) {
 		try {
 			String endPoint = swag.getHost();
 
@@ -128,7 +129,7 @@ public abstract class Method {
 			}
 
 			if (operation.getConsumes() != null) {
-				for (String app : operation.getConsumes()) {
+				for (String app : operation.getProduces()) {
 					request.header("accept", app);
 				}
 			}
@@ -154,33 +155,42 @@ public abstract class Method {
 				}
 			}
 
+			long begin = System.currentTimeMillis();
+
 			HttpResponse<JsonNode> response = request.asJson();
 
+			long elapsed = System.currentTimeMillis() - begin;
+
+			SwagResponse retval = new SwagResponse(response, elapsed);
+
 			log.debug(response.getBody().toString());
+
+			return retval;
 		} catch (UnirestException e) {
 			e.printStackTrace();
+			return null;
 		}
 	}
 
-	public void validTest() {
-		genericTest(TestType.VALID);
+	public SwagResponse validTest() {
+		return genericTest(TestType.VALID);
 	}
 
-	public void timeoutTest(long milliseconds) {
+	public SwagResponse timeoutTest(long milliseconds) {
 		// TODO Insert timeout here
-		genericTest(TestType.TIMEOUT);
+		return genericTest(TestType.TIMEOUT);
 	}
 
-	public void extremValuesTest() {
-		genericTest(TestType.EXTREME_VALUES);
+	public SwagResponse extremValuesTest() {
+		return genericTest(TestType.EXTREME_VALUES);
 	}
 
-	public void invalidTest() {
-		genericTest(TestType.INVALID);
+	public SwagResponse invalidTest() {
+		return genericTest(TestType.INVALID);
 	}
 
-	public void scalingTest() {
+	public SwagResponse scalingTest() {
 		// TODO Insert threads here
-		genericTest(TestType.SCALLING);
+		return genericTest(TestType.SCALLING);
 	}
 }
