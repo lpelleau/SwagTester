@@ -2,6 +2,9 @@ package net.pelleau.swagger;
 
 import com.mashape.unirest.http.HttpResponse;
 
+/**
+ * Represents a http response.
+ */
 public class SwagResponse {
 
 	private int statusCode;
@@ -62,9 +65,8 @@ public class SwagResponse {
 
 	@Override
 	public String toString() {
-		return "SwagResponse [\n\tstatusCode=" + statusCode + ", \n\tstatusText=" + statusText + ", \n\theader=" + header
-				+ ", \n\tbody=" + body + ", \n\tresponseTime=" + responseTime + "\n]";
+		return "SwagResponse [statusCode=" + statusCode + ", statusText=" + statusText + ", header=" + header
+				+ ", body=" + body + ", responseTime=" + responseTime + "\n]";
 	}
-	
-	
+
 }

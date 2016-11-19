@@ -15,7 +15,7 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
 import net.pelleau.swagger.SwagResponse;
-import net.pelleau.utils.SwagResponseAssert;
+import net.pelleau.utils.SwagAssert;
 
 public class TestSwagResponse {
 
@@ -30,7 +30,7 @@ public class TestSwagResponse {
 
 		SwagResponse swag = new SwagResponse(response, elapsed);
 
-		SwagResponseAssert.assertStatusCodeEquals(200, swag);
+		SwagAssert.assertStatusCodeEquals(200, swag);
 	}
 
 	// @Test // cancel because content may change.
@@ -48,7 +48,7 @@ public class TestSwagResponse {
 						.get(TestSwagResponse.class.getClassLoader().getResource("expected_result_1.json").toURI()))
 				.stream().collect(Collectors.joining("\n")));
 
-		SwagResponseAssert.assertEquals(expected, swag);
+		SwagAssert.assertEquals(expected, swag);
 	}
 
 	// @Test // cancel because content may change.
@@ -66,6 +66,6 @@ public class TestSwagResponse {
 						.get(TestSwagResponse.class.getClassLoader().getResource("expected_result_2.json").toURI()))
 				.stream().collect(Collectors.joining("\n")));
 
-		SwagResponseAssert.assertEquals(expected, swag);
+		SwagAssert.assertEquals(expected, swag);
 	}
 }

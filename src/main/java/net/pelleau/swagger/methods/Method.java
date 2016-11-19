@@ -34,6 +34,11 @@ public abstract class Method {
 
 	protected SwagResponse genericTest(TestType testType) {
 		try {
+
+			// TODO create SwagTest
+
+			// TODO create SwagRequest
+
 			String endPoint = swag.getHost();
 
 			String params[] = name.split("/");
@@ -100,7 +105,13 @@ public abstract class Method {
 				}
 			}
 
+			// TODO create ExpectedResponse
+
 			log.debug("Requesting : " + endPoint);
+
+			// TODO give the filled SwagTest to a method which launch the web
+			// request to the server
+			// TODO in this method, fill the SwagResponse
 
 			HttpRequest request = null;
 
@@ -160,6 +171,8 @@ public abstract class Method {
 			HttpResponse<JsonNode> response = request.asJson();
 
 			long elapsed = System.currentTimeMillis() - begin;
+
+			// TODO Returns the filled SwagTest
 
 			SwagResponse retval = new SwagResponse(response, elapsed);
 

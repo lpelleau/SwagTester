@@ -3,14 +3,21 @@ package net.pelleau.utils;
 import org.junit.Assert;
 
 import net.pelleau.swagger.SwagResponse;
+import net.pelleau.swagger.SwagTest;
 
-public class SwagResponseAssert extends Assert {
+public class SwagAssert extends Assert {
 
-	private SwagResponseAssert() {
+	private SwagAssert() {
+	}
+
+	public static void assertValid(SwagTest test) {
+		if (!test.isValid()) {
+			fail();
+		}
 	}
 
 	/**
-	 * Test if the statusCode and the body are equals.
+	 * Test if the statusCode and the body of SwagResponse are equals.
 	 * 
 	 * @param expected
 	 *            the expected result.
