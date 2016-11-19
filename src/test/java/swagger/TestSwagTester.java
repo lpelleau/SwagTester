@@ -15,10 +15,11 @@ import org.slf4j.LoggerFactory;
 
 import net.pelleau.swagger.SwagResponse;
 import net.pelleau.swagger.SwagTester;
+import net.pelleau.utils.SwagAssert;
 
 public class TestSwagTester {
 
-	@SuppressWarnings("unused")
+	// @SuppressWarnings("unused")
 	private static Logger log = LoggerFactory.getLogger(TestSwagTester.class);
 
 	private static final String file = "petstore.json";
@@ -81,5 +82,53 @@ public class TestSwagTester {
 		SwagResponse response = swagger.entryPoint("/pet/{petId}").getMethod().validTest();
 
 		log.debug(response.toString());
+	}
+
+	@Test
+	public void testGeneric2() {
+		SwagAssert.assertValid(swagger.entryPoint("/pet/{petId}").getMethod().validTest2());
+	}
+
+	@Test
+	public void testFullGeneric2() {
+
+		swagger.entryPoints().forEach((name, entry) -> {
+			log.debug("Testing : " + entry.toString());
+
+			// change the max loop value to test many times
+			for (int i = 0; i <= 1; i++) {
+
+				if (entry.getMethod() != null) {
+					SwagAssert.assertValid(entry.getMethod().validTest2());
+				}
+
+				if (entry.headMethod() != null) {
+					SwagAssert.assertValid(entry.headMethod().validTest2());
+				}
+
+				if (entry.postMethod() != null) {
+					// SwagAssert.assertValid(entry.postMethod().validTest2());
+				}
+
+				if (entry.putMethod() != null) {
+					// SwagAssert.assertValid(entry.putMethod().validTest2());
+				}
+
+				if (entry.patchMethod() != null) {
+					// SwagAssert.assertValid(entry.patchMethod().validTest2());
+				}
+
+				if (entry.optionsMethod() != null) {
+					// SwagAssert.assertValid(entry.optionsMethod().validTest2());
+				}
+
+				if (entry.deleteMethod() != null) {
+					// SwagAssert.assertValid(entry.deleteMethod().validTest2());
+				}
+
+			}
+
+		});
+
 	}
 }

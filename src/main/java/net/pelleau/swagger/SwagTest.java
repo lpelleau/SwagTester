@@ -3,6 +3,12 @@ package net.pelleau.swagger;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
+import com.mashape.unirest.request.HttpRequest;
+import com.mashape.unirest.request.HttpRequestWithBody;
+
 /**
  * Represents a testCase
  */
@@ -13,9 +19,71 @@ public class SwagTest {
 
 	private List<SwagResponse> expectedValues;
 
+	public SwagTest() {
+
+	}
+
 	public SwagTest(SwagRequest request, SwagResponse response) {
 		this.request = request;
 		this.response = response;
+	}
+
+	public void execute() throws UnirestException {
+
+		if (request != null && request.getUrl() != null) {
+
+			HttpRequest call = null;
+
+			switch (request.getMethod()) {
+			case GET:
+				call = Unirest.get(request.getUrl());
+				break;
+			case POST:
+				call = Unirest.post(request.getUrl());
+				break;
+			case PUT:
+				call = Unirest.put(request.getUrl());
+				break;
+			case DELETE:
+				call = Unirest.delete(request.getUrl());
+				break;
+			case HEAD:
+				call = Unirest.head(request.getUrl());
+				break;
+			case OPTIONS:
+				call = Unirest.options(request.getUrl());
+				break;
+			case PATCH:
+				call = Unirest.patch(request.getUrl());
+				break;
+			}
+
+			if (!request.getQueryParameters().isEmpty()) {
+				call.queryString(request.getQueryParameters());
+			}
+
+			if (!request.getHeaderParameters().isEmpty()) {
+				call.headers(request.getHeaderParameters());
+			}
+
+			if (call instanceof HttpRequestWithBody) {
+				HttpRequestWithBody complexCall = (HttpRequestWithBody) call;
+
+				if (request.getBodyParameters() != null) {
+					complexCall.body(request.getBodyParameters());
+				} else if (!request.getFormDataParameters().isEmpty()) {
+					complexCall.fields(request.getFormDataParameters());
+				}
+
+			}
+
+			long begin = System.currentTimeMillis();
+			HttpResponse<String> input = call.asString();
+			long elapsed = System.currentTimeMillis() - begin;
+
+			response = new SwagResponse(input, elapsed);
+		}
+
 	}
 
 	/**
@@ -66,6 +134,10 @@ public class SwagTest {
 			expectedValues = new ArrayList<SwagResponse>();
 		}
 		return expectedValues;
+	}
+
+	public void setRequest(SwagRequest request) {
+		this.request = request;
 	}
 
 	public SwagResponse getResponse() {

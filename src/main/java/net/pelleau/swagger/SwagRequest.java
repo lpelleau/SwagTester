@@ -1,5 +1,8 @@
 package net.pelleau.swagger;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import io.swagger.models.HttpMethod;
 import net.pelleau.swagger.methods.TestType;
 
@@ -14,9 +17,61 @@ public class SwagRequest {
 
 	private TestType testType;
 
-	private String headerParameters;
-	private String queryParameters;
+	private Map<String, String> headerParameters;
+	private Map<String, Object> queryParameters;
 	private String bodyParameters;
-	private String dataFormParameters;
+	private Map<String, Object> formDataParameters;
 
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public HttpMethod getMethod() {
+		return method;
+	}
+
+	public void setMethod(HttpMethod method) {
+		this.method = method;
+	}
+
+	public TestType getTestType() {
+		return testType;
+	}
+
+	public void setTestType(TestType testType) {
+		this.testType = testType;
+	}
+
+	public String getBodyParameters() {
+		return bodyParameters;
+	}
+
+	public void setBodyParameters(String bodyParameters) {
+		this.bodyParameters = bodyParameters;
+	}
+
+	public Map<String, String> getHeaderParameters() {
+		if (headerParameters == null) {
+			headerParameters = new HashMap<String, String>();
+		}
+		return headerParameters;
+	}
+
+	public Map<String, Object> getQueryParameters() {
+		if (queryParameters == null) {
+			queryParameters = new HashMap<String, Object>();
+		}
+		return queryParameters;
+	}
+
+	public Map<String, Object> getFormDataParameters() {
+		if (formDataParameters == null) {
+			formDataParameters = new HashMap<String, Object>();
+		}
+		return formDataParameters;
+	}
 }

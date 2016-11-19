@@ -46,6 +46,10 @@ public class RandomGenerator {
 		return rng.nextInt((max - min) + 1) + min;
 	}
 
+	public static double getDouble() {
+		return rng.nextDouble();
+	}
+
 	/**
 	 * @return a random boolean.
 	 */
@@ -89,7 +93,7 @@ public class RandomGenerator {
 	/**
 	 * Not implemented yet !
 	 */
-	public static Object fillObject(Model model) {
+	public static String fillObject(Model model) {
 		// TODO generate JSON object from Swagger Model and fill the values
 		// inside with random values
 		return null;

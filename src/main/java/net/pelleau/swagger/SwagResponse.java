@@ -15,6 +15,10 @@ public class SwagResponse {
 
 	private long responseTime;
 
+	public SwagResponse() {
+
+	}
+
 	public SwagResponse(long responseTime) {
 		this.responseTime = responseTime;
 	}
@@ -63,10 +67,14 @@ public class SwagResponse {
 		return responseTime;
 	}
 
+	public void setResponseTime(long responseTime) {
+		this.responseTime = responseTime;
+	}
+
 	@Override
 	public String toString() {
 		return "SwagResponse [statusCode=" + statusCode + ", statusText=" + statusText + ", header=" + header
-				+ ", body=" + body + ", responseTime=" + responseTime + "\n]";
+				+ ", body=" + body + ", responseTime=" + responseTime + "]";
 	}
 
 }

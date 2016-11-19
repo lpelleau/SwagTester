@@ -5,8 +5,14 @@ import java.util.Map;
 
 import io.swagger.models.HttpMethod;
 import io.swagger.models.Path;
+import net.pelleau.swagger.methods.DeleteMethod;
 import net.pelleau.swagger.methods.GetMethod;
+import net.pelleau.swagger.methods.HeadMethod;
 import net.pelleau.swagger.methods.Method;
+import net.pelleau.swagger.methods.OptionMethod;
+import net.pelleau.swagger.methods.PatchMethod;
+import net.pelleau.swagger.methods.PostMethod;
+import net.pelleau.swagger.methods.PutMethod;
 
 class EntryPointImpl implements EntryPoint {
 
@@ -24,7 +30,34 @@ class EntryPointImpl implements EntryPoint {
 
 	private Method getMethod(HttpMethod httpMethod) {
 		if (!methods.containsKey(httpMethod)) {
-			Method method = new GetMethod(swag, name, path.getOperationMap().get(httpMethod));
+			Method method = null;
+
+			if (path.getOperationMap().get(httpMethod) != null) {
+				switch (httpMethod) {
+				case GET:
+					method = new GetMethod(swag, name, path.getOperationMap().get(httpMethod));
+					break;
+				case DELETE:
+					method = new DeleteMethod(swag, name, path.getOperationMap().get(httpMethod));
+					break;
+				case HEAD:
+					method = new HeadMethod(swag, name, path.getOperationMap().get(httpMethod));
+					break;
+				case OPTIONS:
+					method = new OptionMethod(swag, name, path.getOperationMap().get(httpMethod));
+					break;
+				case PATCH:
+					method = new PatchMethod(swag, name, path.getOperationMap().get(httpMethod));
+					break;
+				case POST:
+					method = new PostMethod(swag, name, path.getOperationMap().get(httpMethod));
+					break;
+				case PUT:
+					method = new PutMethod(swag, name, path.getOperationMap().get(httpMethod));
+					break;
+				}
+			}
+
 			methods.put(httpMethod, method);
 		}
 
@@ -64,6 +97,13 @@ class EntryPointImpl implements EntryPoint {
 	@Override
 	public Method optionsMethod() {
 		return getMethod(HttpMethod.OPTIONS);
+	}
+
+	@Override
+	public String toString() {
+		return "EntryPointImpl [name=" + name + ", getMethod()=" + getMethod() + ", postMethod()=" + postMethod()
+				+ ", putMethod()=" + putMethod() + ", patchMethod()=" + patchMethod() + ", deleteMethod()="
+				+ deleteMethod() + ", headMethod()=" + headMethod() + ", optionsMethod()=" + optionsMethod() + "]";
 	}
 
 }
