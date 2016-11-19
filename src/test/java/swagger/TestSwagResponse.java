@@ -33,7 +33,7 @@ public class TestSwagResponse {
 		SwagResponseAssert.assertStatusCodeEquals(200, swag);
 	}
 
-	@Test
+	// @Test // cancel because content may change.
 	public void testBodyValues() throws UnirestException, IOException, URISyntaxException {
 		long begin = System.currentTimeMillis();
 		HttpResponse<String> response = Unirest.get("http://petstore.swagger.io/v2/pet/4").asString();
@@ -51,10 +51,10 @@ public class TestSwagResponse {
 		SwagResponseAssert.assertEquals(expected, swag);
 	}
 
-	@Test
+	// @Test // cancel because content may change.
 	public void testBodyValues2() throws UnirestException, IOException, URISyntaxException {
 		long begin = System.currentTimeMillis();
-		HttpResponse<String> response = Unirest.get("http://petstore.swagger.io/v2/pet/1").asString();
+		HttpResponse<String> response = Unirest.get("http://petstore.swagger.io/v2/pet/62").asString();
 		long elapsed = System.currentTimeMillis() - begin;
 
 		SwagResponse swag = new SwagResponse(response, elapsed);
