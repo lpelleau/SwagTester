@@ -29,8 +29,9 @@ public class SwagTester {
 
 		if (swagger != null) {
 
-			// TODO Test if the file have no scheme (zero) ?
-			host = swagger.getSchemes().get(0).name().toLowerCase() + "://" + swagger.getHost() + swagger.getBasePath();
+			// if no scheme is defined, use http by default
+			host = (swagger.getSchemes().size() >= 1 ? swagger.getSchemes().get(0).name().toLowerCase() : "http")
+					+ "://" + swagger.getHost() + swagger.getBasePath();
 
 			log.debug("Host : " + host);
 

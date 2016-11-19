@@ -24,6 +24,8 @@ public class TestSwagTester {
 
 	private static final String crapFile = "petstore_crap.json";
 
+	private static final String unknownFile = "unknown.json";
+
 	private SwagTester swagger;
 
 	@BeforeClass
@@ -66,6 +68,11 @@ public class TestSwagTester {
 		} catch (FileNotFoundException e) {
 			fail(e.getMessage());
 		}
+	}
+
+	@Test(expected = FileNotFoundException.class)
+	public void testFileNotFound() throws FileNotFoundException {
+		new SwagTester(unknownFile);
 	}
 
 	@Test
