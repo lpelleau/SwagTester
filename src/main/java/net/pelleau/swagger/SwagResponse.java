@@ -76,5 +76,4 @@ public class SwagResponse {
 		return "SwagResponse [statusCode=" + statusCode + ", statusText=" + statusText + ", header=" + header
 				+ ", body=" + body + ", responseTime=" + responseTime + "]";
 	}
-
 }

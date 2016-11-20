@@ -148,4 +148,8 @@ public class SwagTest {
 		return request;
 	}
 
+	@Override
+	public String toString() {
+		return "SwagTest [request=" + request + ", response=" + response + ", expectedValues=" + expectedValues + "]";
+	}
 }

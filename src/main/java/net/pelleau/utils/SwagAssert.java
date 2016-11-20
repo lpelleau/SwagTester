@@ -5,13 +5,13 @@ import org.junit.Assert;
 import net.pelleau.swagger.SwagResponse;
 import net.pelleau.swagger.SwagTest;
 
-public class SwagAssert extends Assert {
+public final class SwagAssert extends Assert {
 
 	private SwagAssert() {
 	}
 
 	public static void assertValid(SwagTest test) {
-		if (!test.isValid()) {
+		if (test == null || !test.isValid()) {
 			fail();
 		}
 	}

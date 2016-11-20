@@ -64,7 +64,7 @@ public class SwagTester {
 	 * 
 	 * @return true if the server is UP
 	 */
-	public boolean serverUpTest() {
+	public boolean isServerUp() {
 		boolean reachable = true;
 
 		String url = "://" + swagger.getHost();
