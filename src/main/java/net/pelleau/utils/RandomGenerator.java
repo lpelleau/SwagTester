@@ -11,6 +11,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import io.swagger.models.ArrayModel;
 import io.swagger.models.Model;
 import io.swagger.models.Swagger;
 import io.swagger.models.properties.ArrayProperty;
@@ -246,12 +247,12 @@ public final class RandomGenerator {
 
 		} else { // Array of type
 			JSONArray res = new JSONArray();
-			// TODO handle array
-			// Model type = getDefinition(swagger, getRef);
+			ArrayModel arrayModel = (ArrayModel) model;
+			Model type = getDefinition(swagger, ((RefProperty) arrayModel.getItems()).get$ref());
 
-			// for (int i = getInt(50); i >= 0; --i) {
-			// res.put(fillType(swagger, type));
-			// }
+			for (int i = getInt(50); i >= 0; --i) {
+				res.put(fillType(swagger, type));
+			}
 
 			return res.toString();
 		}
