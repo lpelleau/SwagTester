@@ -239,8 +239,6 @@ public final class RandomGenerator {
 	 * @param swag
 	 */
 	public static String fillBody(Model model, Swagger swagger) {
-		// TODO generate JSON object from Swagger Model and fill the values
-		// inside with random values
 		if (model.getReference() != null) { // Simple type
 			Model type = getDefinition(swagger, model.getReference());
 
@@ -251,7 +249,7 @@ public final class RandomGenerator {
 			// TODO handle array
 			// Model type = getDefinition(swagger, getRef);
 
-			// for (int i = getInt(50); i >= 0; ++i) {
+			// for (int i = getInt(50); i >= 0; --i) {
 			// res.put(fillType(swagger, type));
 			// }
 
@@ -363,13 +361,22 @@ public final class RandomGenerator {
 
 			break;
 		case "array":
-			ArrayProperty arrayProp = (ArrayProperty) property;
 			res = new JSONArray();
-			Model arrayT = getDefinition(swagger, arrayProp.getType());
 
-			for (int i = getInt(50); i >= 0; ++i) {
-				// TODO handle array
-				// ((JSONArray) res).put(fillType(swagger, arrayT));
+			ArrayProperty arrayProp = (ArrayProperty) property;
+			try {
+				refProp = (RefProperty) arrayProp.getItems();
+				refT = getDefinition(swagger, refProp.get$ref());
+
+				for (int i = getInt(50); i >= 0; --i) {
+					((JSONArray) res).put(fillType(swagger, refT));
+				}
+
+			} catch (ClassCastException e) {
+				// Not a reference to a definition: simple property
+				for (int i = getInt(50); i >= 0; --i) {
+					((JSONArray) res).put(getProperty(swagger, arrayProp.getItems()));
+				}
 			}
 			break;
 		default: {
