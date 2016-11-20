@@ -145,7 +145,8 @@ public class TestSwagTester {
 
 	@Test
 	public void testSth() {
-		swagger.entryPoint("/pet").postMethod().validTest();
-		// swagger.entryPoint("/user/createWithArray").postMethod().validTest();
+		swagger.entryPoint("/pet").postMethod().validTest(); // Simple object
+		swagger.entryPoint("/user/createWithArray").postMethod().validTest(); // Array
+																				// object
 	}
 }

@@ -13,7 +13,9 @@ import org.json.JSONObject;
 
 import io.swagger.models.Model;
 import io.swagger.models.Swagger;
+import io.swagger.models.properties.ArrayProperty;
 import io.swagger.models.properties.Property;
+import io.swagger.models.properties.RefProperty;
 
 public final class RandomGenerator {
 
@@ -240,42 +242,44 @@ public final class RandomGenerator {
 		// TODO generate JSON object from Swagger Model and fill the values
 		// inside with random values
 		if (model.getReference() != null) { // Simple type
-			Matcher m = Pattern.compile("/([A-Za-z]+)$").matcher(model.getReference());
+			Model type = getDefinition(swagger, model.getReference());
 
-			if (m.find()) {
-				Model type = swagger.getDefinitions().get(m.group(1));
-
-				String res = fillType(type).toString();
-				System.out.println(res);
-				return res;
-
-			} else {
-				return "";
-			}
+			return (type != null) ? fillType(swagger, type).toString() : "";
 
 		} else { // Array of type
 			JSONArray res = new JSONArray();
+			// TODO handle array
+			// Model type = getDefinition(swagger, getRef);
 
-			for (int i = getInt(50); i >= 0; ++i) {
-				// res.put(fillType(type));
-			}
+			// for (int i = getInt(50); i >= 0; ++i) {
+			// res.put(fillType(swagger, type));
+			// }
 
 			return res.toString();
 		}
 	}
 
-	private static JSONObject fillType(Model definition) {
+	private static Model getDefinition(Swagger swagger, String ref) {
+		Matcher m = Pattern.compile("/([A-Za-z]+)$").matcher(ref);
+
+		if (m.find()) {
+			return swagger.getDefinitions().get(m.group(1));
+		}
+		return null;
+	}
+
+	private static JSONObject fillType(Swagger swagger, Model definition) {
 		JSONObject res = new JSONObject();
 
 		for (Entry<String, Property> entry : definition.getProperties().entrySet()) {
-			res.put(entry.getKey(), getProperty(entry.getValue()));
+			res.put(entry.getKey(), getProperty(swagger, entry.getValue()));
 		}
 
 		return res;
 	}
 
-	private static String getProperty(Property property) {
-		String res = "";
+	private static Object getProperty(Swagger swagger, Property property) {
+		Object res = null;
 		String type = property.getType() == null ? "" : property.getType();
 		String format = property.getFormat() == null ? "" : property.getFormat();
 
@@ -350,6 +354,24 @@ public final class RandomGenerator {
 
 			break;
 		}
+		case "ref":
+			RefProperty refProp = (RefProperty) property;
+			Model refT = getDefinition(swagger, refProp.get$ref());
+			if (refT != null) {
+				res = fillType(swagger, refT);
+			}
+
+			break;
+		case "array":
+			ArrayProperty arrayProp = (ArrayProperty) property;
+			res = new JSONArray();
+			Model arrayT = getDefinition(swagger, arrayProp.getType());
+
+			for (int i = getInt(50); i >= 0; ++i) {
+				// TODO handle array
+				// ((JSONArray) res).put(fillType(swagger, arrayT));
+			}
+			break;
 		default: {
 		}
 		}
