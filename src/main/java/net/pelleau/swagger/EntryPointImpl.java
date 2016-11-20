@@ -5,6 +5,7 @@ import java.util.Map;
 
 import io.swagger.models.HttpMethod;
 import io.swagger.models.Path;
+import io.swagger.models.Swagger;
 import net.pelleau.swagger.methods.DeleteMethod;
 import net.pelleau.swagger.methods.GetMethod;
 import net.pelleau.swagger.methods.HeadMethod;
@@ -16,12 +17,14 @@ import net.pelleau.swagger.methods.PutMethod;
 
 class EntryPointImpl implements EntryPoint {
 
+	private Swagger swagger;
 	private SwagTester swag;
 	private String name;
 	private Path path;
 	Map<HttpMethod, Method> methods;
 
-	public EntryPointImpl(SwagTester swag, String name, Path path) {
+	public EntryPointImpl(Swagger swagger, SwagTester swag, String name, Path path) {
+		this.swagger = swagger;
 		this.swag = swag;
 		this.name = name;
 		this.path = path;
@@ -35,25 +38,25 @@ class EntryPointImpl implements EntryPoint {
 			if (path.getOperationMap().get(httpMethod) != null) {
 				switch (httpMethod) {
 				case GET:
-					method = new GetMethod(swag, name, path.getOperationMap().get(httpMethod));
+					method = new GetMethod(swagger, swag, name, path.getOperationMap().get(httpMethod));
 					break;
 				case DELETE:
-					method = new DeleteMethod(swag, name, path.getOperationMap().get(httpMethod));
+					method = new DeleteMethod(swagger, swag, name, path.getOperationMap().get(httpMethod));
 					break;
 				case HEAD:
-					method = new HeadMethod(swag, name, path.getOperationMap().get(httpMethod));
+					method = new HeadMethod(swagger, swag, name, path.getOperationMap().get(httpMethod));
 					break;
 				case OPTIONS:
-					method = new OptionMethod(swag, name, path.getOperationMap().get(httpMethod));
+					method = new OptionMethod(swagger, swag, name, path.getOperationMap().get(httpMethod));
 					break;
 				case PATCH:
-					method = new PatchMethod(swag, name, path.getOperationMap().get(httpMethod));
+					method = new PatchMethod(swagger, swag, name, path.getOperationMap().get(httpMethod));
 					break;
 				case POST:
-					method = new PostMethod(swag, name, path.getOperationMap().get(httpMethod));
+					method = new PostMethod(swagger, swag, name, path.getOperationMap().get(httpMethod));
 					break;
 				case PUT:
-					method = new PutMethod(swag, name, path.getOperationMap().get(httpMethod));
+					method = new PutMethod(swagger, swag, name, path.getOperationMap().get(httpMethod));
 					break;
 				}
 			}

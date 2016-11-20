@@ -1,11 +1,19 @@
 package net.pelleau.utils;
 
 import java.sql.Timestamp;
+import java.util.Map.Entry;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import io.swagger.models.Model;
+import io.swagger.models.Swagger;
+import io.swagger.models.properties.Property;
 
 public final class RandomGenerator {
 
@@ -61,6 +69,58 @@ public final class RandomGenerator {
 		} else {
 			return rng.nextInt(Integer.MIN_VALUE, bound);
 		}
+	}
+
+	/**
+	 * @return a random long.
+	 */
+	public static long getLong() {
+		return rng.nextLong();
+	}
+
+	/**
+	 * 
+	 * @param max
+	 *            the max bound.
+	 * @return a random long between 0 (inclusive) and max (exclusive).
+	 */
+	public static long getLong(long max) {
+		return rng.nextLong(max);
+	}
+
+	/**
+	 * @param min
+	 *            the min bound.
+	 * @param max
+	 *            the max bound.
+	 * @return a random long between min (inclusive) and max (inclusive).
+	 */
+	public static long getLong(long min, long max) {
+		return rng.nextLong(min, max);
+	}
+
+	/**
+	 * @param bound
+	 *            the limit value of your domain.
+	 * @param type
+	 *            the limit of bound you want. Min or Max.
+	 * @return if type equals Min, returns a random long between bound and
+	 *         Max_Value. if type equals Max, returns a random long between
+	 *         Min_Value and bound.
+	 */
+	public static long getLong(long bound, BoundType type) {
+		if (type == BoundType.MIN) {
+			return rng.nextLong(bound, Long.MAX_VALUE);
+		} else {
+			return rng.nextLong(Long.MIN_VALUE, bound);
+		}
+	}
+
+	/**
+	 * @return a random float.
+	 */
+	public static float getFloat() {
+		return rng.nextFloat();
 	}
 
 	/**
@@ -173,11 +233,127 @@ public final class RandomGenerator {
 
 	/**
 	 * Not implemented yet !
+	 * 
+	 * @param swag
 	 */
-	public static String fillObject(Model model) {
+	public static String fillBody(Model model, Swagger swagger) {
 		// TODO generate JSON object from Swagger Model and fill the values
 		// inside with random values
-		return null;
+		if (model.getReference() != null) { // Simple type
+			Matcher m = Pattern.compile("/([A-Za-z]+)$").matcher(model.getReference());
+
+			if (m.find()) {
+				Model type = swagger.getDefinitions().get(m.group(1));
+
+				String res = fillType(type).toString();
+				System.out.println(res);
+				return res;
+
+			} else {
+				return "";
+			}
+
+		} else { // Array of type
+			JSONArray res = new JSONArray();
+
+			for (int i = getInt(50); i >= 0; ++i) {
+				// res.put(fillType(type));
+			}
+
+			return res.toString();
+		}
+	}
+
+	private static JSONObject fillType(Model definition) {
+		JSONObject res = new JSONObject();
+
+		for (Entry<String, Property> entry : definition.getProperties().entrySet()) {
+			res.put(entry.getKey(), getProperty(entry.getValue()));
+		}
+
+		return res;
+	}
+
+	private static String getProperty(Property property) {
+		String res = "";
+		String type = property.getType() == null ? "" : property.getType();
+		String format = property.getFormat() == null ? "" : property.getFormat();
+
+		switch (type) {
+		case "integer": {
+
+			switch (format) {
+			case "int32": {
+				res = String.valueOf(getInt());
+				break;
+			}
+			case "int64": {
+				res = String.valueOf(getLong());
+				break;
+			}
+			default: {
+			}
+			}
+
+			break;
+		}
+		case "number": {
+
+			switch (format) {
+			case "float": {
+				res = String.valueOf(getFloat());
+				break;
+			}
+			case "double": {
+				res = String.valueOf(getDouble());
+				break;
+			}
+			default: {
+			}
+			}
+
+			break;
+		}
+		case "boolean": {
+
+			res = String.valueOf(getBool());
+
+			break;
+		}
+		case "string": {
+
+			switch (format) {
+			case "password":
+			case "": {
+				res = getString(getInt(20));
+				break;
+			}
+			case "byte": {
+				res = new String(Base64.encodeBase64((getString(getInt(20)).getBytes())));
+				break;
+			}
+			case "binary": {
+				res = new String(getString(getInt(20)).getBytes());
+				break;
+			}
+			case "date": {
+				res = getNumericString(4) + "-" + getNumericString(2) + "-" + getNumericString(2);
+				break;
+			}
+			case "date-time": {
+				res = getDateTime();
+				break;
+			}
+			default: {
+			}
+			}
+
+			break;
+		}
+		default: {
+		}
+		}
+		return res;
 	}
 
 	/**

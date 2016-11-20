@@ -142,4 +142,10 @@ public class TestSwagTester {
 			}
 		});
 	}
+
+	@Test
+	public void testSth() {
+		swagger.entryPoint("/pet").postMethod().validTest();
+		// swagger.entryPoint("/user/createWithArray").postMethod().validTest();
+	}
 }

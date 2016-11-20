@@ -7,6 +7,7 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 
 import io.swagger.models.HttpMethod;
 import io.swagger.models.Operation;
+import io.swagger.models.Swagger;
 import io.swagger.models.parameters.BodyParameter;
 import io.swagger.models.parameters.FormParameter;
 import io.swagger.models.parameters.HeaderParameter;
@@ -23,11 +24,13 @@ public abstract class Method {
 
 	private static Logger log = LoggerFactory.getLogger(Method.class);
 
+	private Swagger swagger;
 	private SwagTester swag;
 	private String name;
 	private Operation operation;
 
-	public Method(SwagTester swag, String name, Operation operation) {
+	public Method(Swagger swagger, SwagTester swag, String name, Operation operation) {
+		this.swagger = swagger;
 		this.swag = swag;
 		this.name = name;
 		this.operation = operation;
@@ -97,7 +100,7 @@ public abstract class Method {
 				case "body": {
 					BodyParameter bodyParam = (BodyParameter) param;
 
-					request.setBodyParameters(RandomGenerator.fillObject(bodyParam.getSchema()));
+					request.setBodyParameters(RandomGenerator.fillBody(bodyParam.getSchema(), swagger));
 
 					break;
 				}

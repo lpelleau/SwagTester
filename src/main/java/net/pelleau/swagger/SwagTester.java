@@ -46,7 +46,7 @@ public class SwagTester {
 		entryPoints = new HashMap<>();
 
 		swagger.getPaths().forEach((name, path) -> {
-			EntryPoint ep = new EntryPointImpl(this, name, path);
+			EntryPoint ep = new EntryPointImpl(swagger, this, name, path);
 			entryPoints.put(name, ep);
 		});
 	}
