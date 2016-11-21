@@ -5,9 +5,9 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.commons.lang3.RandomStringUtils;
 
-public final class ValidRandomGenerator implements RandomGenerator {
+final class ValidRandomGenerator implements RandomGenerator {
 
-	private ThreadLocalRandom rng = ThreadLocalRandom.current();
+	private static ThreadLocalRandom rng = ThreadLocalRandom.current();
 
 	public ValidRandomGenerator() {
 	}
@@ -28,15 +28,6 @@ public final class ValidRandomGenerator implements RandomGenerator {
 	}
 
 	@Override
-	public int getInt(int bound, BoundType type) {
-		if (type == BoundType.MIN) {
-			return rng.nextInt(bound, Integer.MAX_VALUE);
-		} else {
-			return rng.nextInt(Integer.MIN_VALUE, bound);
-		}
-	}
-
-	@Override
 	public long getLong() {
 		return rng.nextLong();
 	}
@@ -49,15 +40,6 @@ public final class ValidRandomGenerator implements RandomGenerator {
 	@Override
 	public long getLong(long min, long max) {
 		return rng.nextLong(min, max);
-	}
-
-	@Override
-	public long getLong(long bound, BoundType type) {
-		if (type == BoundType.MIN) {
-			return rng.nextLong(bound, Long.MAX_VALUE);
-		} else {
-			return rng.nextLong(Long.MIN_VALUE, bound);
-		}
 	}
 
 	@Override
@@ -78,15 +60,6 @@ public final class ValidRandomGenerator implements RandomGenerator {
 	@Override
 	public double getDouble(double min, double max) {
 		return rng.nextDouble(min, max);
-	}
-
-	@Override
-	public double getDouble(double bound, BoundType type) {
-		if (type == BoundType.MIN) {
-			return rng.nextDouble(bound, Double.MAX_VALUE);
-		} else {
-			return rng.nextDouble(Double.MIN_VALUE, bound);
-		}
 	}
 
 	@Override
@@ -117,6 +90,11 @@ public final class ValidRandomGenerator implements RandomGenerator {
 	@Override
 	public String getNumericString(int length) {
 		return RandomStringUtils.random(length, 0, 0, false, true, null, rng);
+	}
+
+	@Override
+	public String getDate() {
+		return getNumericString(4) + "-" + getNumericString(2) + "-" + getNumericString(2);
 	}
 
 	@Override

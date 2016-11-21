@@ -1,10 +1,6 @@
 package net.pelleau.utils;
 
-public interface RandomGenerator {
-
-	public static enum BoundType {
-		MIN, MAX
-	};
+interface RandomGenerator {
 
 	/**
 	 * @return a random int.
@@ -29,17 +25,6 @@ public interface RandomGenerator {
 	int getInt(int min, int max);
 
 	/**
-	 * @param bound
-	 *            the limit value of your domain.
-	 * @param type
-	 *            the limit of bound you want. Min or Max.
-	 * @return if type equals Min, returns a random integer between bound and
-	 *         Max_Value. if type equals Max, returns a random integer between
-	 *         Min_Value and bound.
-	 */
-	int getInt(int bound, BoundType type);
-
-	/**
 	 * @return a random long.
 	 */
 	long getLong();
@@ -60,17 +45,6 @@ public interface RandomGenerator {
 	 * @return a random long between min (inclusive) and max (inclusive).
 	 */
 	long getLong(long min, long max);
-
-	/**
-	 * @param bound
-	 *            the limit value of your domain.
-	 * @param type
-	 *            the limit of bound you want. Min or Max.
-	 * @return if type equals Min, returns a random long between bound and
-	 *         Max_Value. if type equals Max, returns a random long between
-	 *         Min_Value and bound.
-	 */
-	long getLong(long bound, BoundType type);
 
 	/**
 	 * @return a random float.
@@ -97,17 +71,6 @@ public interface RandomGenerator {
 	 * @return a random double between min and max.
 	 */
 	double getDouble(double min, double max);
-
-	/**
-	 * @param bound
-	 *            the limit value of your domain.
-	 * @param type
-	 *            the limit of bound you want. Min or Max.
-	 * @return if type equals Min, returns a random double between bound and
-	 *         Max_Value. if type equals Max, returns a random double between
-	 *         Min_Value and bound.
-	 */
-	double getDouble(double bound, BoundType type);
 
 	/**
 	 * @return a random boolean.
@@ -160,6 +123,11 @@ public interface RandomGenerator {
 	 * @return a random String with only length numerical characters.
 	 */
 	String getNumericString(int length);
+
+	/**
+	 * @return returns a random Data with "AAAA-MM-DD" (ex: "1970-01-01")
+	 */
+	String getDate();
 
 	/**
 	 * @return returns a random DateTime with "AAAA-MM-DDTHH:MM:SS.MMMZ" (ex:

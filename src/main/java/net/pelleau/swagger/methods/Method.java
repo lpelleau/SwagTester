@@ -18,7 +18,7 @@ import net.pelleau.swagger.SwagResponse;
 import net.pelleau.swagger.SwagTest;
 import net.pelleau.swagger.SwagTester;
 import net.pelleau.utils.ParameterGenerator;
-import net.pelleau.utils.RandomGenerator;
+import net.pelleau.utils.ValidRandomGenerator;
 
 public abstract class Method {
 
@@ -66,51 +66,8 @@ public abstract class Method {
 
 		// add parameters
 		if (operation.getParameters() != null && !operation.getParameters().isEmpty()) {
-			operation.getParameters().forEach(param -> {
-				switch (param.getIn()) {
-
-				case "path": {
-					PathParameter pathParam = (PathParameter) param;
-
-					ParameterGenerator.fillPathParameter(request, pathParam, testType);
-
-					break;
-				}
-				case "query": {
-					QueryParameter queryParam = (QueryParameter) param;
-
-					ParameterGenerator.fillQueryParameter(request, queryParam, testType);
-
-					break;
-				}
-				case "header": {
-					HeaderParameter headerParam = (HeaderParameter) param;
-
-					ParameterGenerator.fillHeaderParameter(request, headerParam, testType);
-
-					break;
-				}
-				case "formData": {
-					FormParameter formParam = (FormParameter) param;
-
-					ParameterGenerator.fillFormParameter(request, formParam, testType);
-
-					break;
-				}
-				case "body": {
-					BodyParameter bodyParam = (BodyParameter) param;
-
-					Object body = RandomGenerator.fillBody(bodyParam.getSchema(), swagger);
-					request.setBodyParameters(body);
-
-					break;
-				}
-				default: {
-					log.error("The IN value is incorrect. Expected : 'body', 'query', 'path' or 'formData'. Given : '"
-							+ param.getIn() + "'.");
-				}
-				}
-			});
+			operation.getParameters()
+					.forEach(param -> ParameterGenerator.fillParameter(swagger, request, param, testType));
 		}
 
 		// generate expected responses

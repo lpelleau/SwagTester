@@ -1,343 +1,110 @@
 package net.pelleau.utils;
 
-import io.swagger.models.parameters.FormParameter;
-import io.swagger.models.parameters.HeaderParameter;
-import io.swagger.models.parameters.PathParameter;
-import io.swagger.models.parameters.QueryParameter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import io.swagger.models.Swagger;
+import io.swagger.models.parameters.BodyParameter;
+import io.swagger.models.parameters.Parameter;
+import io.swagger.models.parameters.SerializableParameter;
 import net.pelleau.swagger.SwagRequest;
 import net.pelleau.swagger.methods.TestType;
-import net.pelleau.utils.RandomGenerator.BoundType;
 
 public final class ParameterGenerator {
+
+	private static Logger log = LoggerFactory.getLogger(ParameterGenerator.class);
 
 	private ParameterGenerator() {
 
 	}
 
-	private static int stringDefaultMinLength = 3;
-	private static int stringDefaultMaxLength = 15;
+	public static void fillParameter(Swagger swagger, SwagRequest request, Parameter param, TestType testType) {
 
-	// TODO take account of the optional values like Maximum,
-	// Minimum, MaxLength
-	// cf : http://swagger.io/specification/#parameterObject
+		if (param.getIn().equals("body")) {
+			BodyParameter bodyParam = (BodyParameter) param;
 
-	public static void fillPathParameter(SwagRequest request, PathParameter pathParam, TestType testType) {
-		if (testType == TestType.VALID) {
-			switch (pathParam.getType()) {
-			case "string": {
-				int min = stringDefaultMinLength;
-				int max = stringDefaultMaxLength;
+			Object value = BodyGenerator.fillBody(swagger, bodyParam.getSchema());
 
-				if (pathParam.getMaxLength() != null) {
-					max = pathParam.getMaxLength();
-				}
+			request.setBodyParameters(value);
+		} else {
+			SerializableParameter ser = (SerializableParameter) param;
 
-				if (pathParam.getMinLength() != null) {
-					min = pathParam.getMinLength();
-				}
+			Object value = getParameterValue(ser, testType);
 
-				request.setUrl(request.getUrl().replaceAll("\\{" + pathParam.getName() + "\\}",
-						RandomGenerator.getString(min, max)));
+			switch (param.getIn()) {
+			case "path":
+				request.setUrl(request.getUrl().replaceAll("\\{" + param.getName() + "\\}", value.toString()));
 				break;
-			}
-			case "number": {
-				double min = Double.MIN_VALUE;
-				double max = Double.MAX_VALUE;
-
-				if (pathParam.getMinimum() != null) {
-					min = pathParam.getMinimum();
-				}
-
-				if (pathParam.getMaximum() != null) {
-					max = pathParam.getMaximum();
-				}
-
-				request.setUrl(request.getUrl().replaceAll("\\{" + pathParam.getName() + "\\}",
-						String.valueOf(RandomGenerator.getDouble(min, max))));
+			case "query":
+				request.getQueryParameters().put(param.getName(), value);
 				break;
-			}
-			case "integer": {
-				int min = Integer.MIN_VALUE;
-				int max = Integer.MAX_VALUE;
-
-				if (pathParam.getMinimum() != null) {
-					min = pathParam.getMinimum().intValue();
-				}
-
-				if (pathParam.getMaximum() != null) {
-					max = pathParam.getMaximum().intValue();
-				}
-
-				request.setUrl(request.getUrl().replaceAll("\\{" + pathParam.getName() + "\\}",
-						String.valueOf(RandomGenerator.getInt(min, max))));
+			case "header":
+				request.getHeaderParameters().put(param.getName(), value.toString());
 				break;
-			}
-			case "boolean": {
-				request.setUrl(request.getUrl().replaceAll("\\{" + pathParam.getName() + "\\}",
-						String.valueOf(RandomGenerator.getBool())));
+			case "formData":
+				request.getFormDataParameters().put(param.getName(), value);
 				break;
-			}
-			case "array":
-				// TODO
-				break;
-			}
-		} else if (testType == TestType.INVALID) {
-			switch (pathParam.getType()) {
-			case "string": {
-				int min = stringDefaultMinLength;
-				int max = stringDefaultMaxLength;
-
-				if (pathParam.getMaxLength() != null) {
-					max = pathParam.getMaxLength() * 2;
-				}
-
-				if (pathParam.getMinLength() != null) {
-					min = pathParam.getMinLength() / 2;
-				}
-
-				request.setUrl(request.getUrl().replaceAll("\\{" + pathParam.getName() + "\\}",
-						RandomGenerator.getString(min, max)));
-				break;
-			}
-			case "number": {
-				if (pathParam.getMinimum() != null) {
-					// between -inf, min
-					request.setUrl(request.getUrl().replaceAll("\\{" + pathParam.getName() + "\\}",
-							String.valueOf(RandomGenerator.getDouble(pathParam.getMinimum(), BoundType.MAX))));
-				} else if (pathParam.getMaximum() != null) {
-					// between max, +inf
-					request.setUrl(request.getUrl().replaceAll("\\{" + pathParam.getName() + "\\}",
-							String.valueOf(RandomGenerator.getDouble(pathParam.getMaximum(), BoundType.MIN))));
-				} else {
-					// full random
-					request.setUrl(request.getUrl().replaceAll("\\{" + pathParam.getName() + "\\}",
-							String.valueOf(RandomGenerator.getDouble())));
-				}
-				break;
-			}
-			case "integer": {
-				if (pathParam.getMinimum() != null) {
-					// between -inf, min
-					request.setUrl(request.getUrl().replaceAll("\\{" + pathParam.getName() + "\\}",
-							String.valueOf(RandomGenerator.getInt(pathParam.getMinimum().intValue(), BoundType.MAX))));
-				} else if (pathParam.getMaximum() != null) {
-					// between max, +inf
-					request.setUrl(request.getUrl().replaceAll("\\{" + pathParam.getName() + "\\}",
-							String.valueOf(RandomGenerator.getInt(pathParam.getMaximum().intValue(), BoundType.MIN))));
-				} else {
-					// full random
-					request.setUrl(request.getUrl().replaceAll("\\{" + pathParam.getName() + "\\}",
-							String.valueOf(RandomGenerator.getInt())));
-				}
-				break;
-			}
-			case "boolean": {
-				request.setUrl(request.getUrl().replaceAll("\\{" + pathParam.getName() + "\\}",
-						String.valueOf(RandomGenerator.getBool())));
-				break;
-			}
-			case "array":
-				// TODO
-				break;
-			}
-		} else if (testType == TestType.SCALLING) {
-			switch (pathParam.getType()) {
-			case "string": {
-				int min = stringDefaultMinLength;
-				int max = stringDefaultMaxLength;
-
-				if (pathParam.getMaxLength() != null) {
-					max = pathParam.getMaxLength() * 2;
-				}
-
-				if (pathParam.getMinLength() != null) {
-					min = pathParam.getMinLength() / 2;
-				}
-
-				request.setUrl(request.getUrl().replaceAll("\\{" + pathParam.getName() + "\\}",
-						RandomGenerator.getString(min, max)));
-				break;
-			}
-			case "number": {
-				double value = 0;
-
-				if (pathParam.getMinimum() != null) {
-					value = pathParam.getMinimum() + 1;
-				} else if (pathParam.getMaximum() != null) {
-					value = pathParam.getMaximum() - 1;
-				}
-
-				request.setUrl(request.getUrl().replaceAll("\\{" + pathParam.getName() + "\\}", String.valueOf(value)));
-
-				break;
-			}
-			case "integer": {
-				int value = 0;
-
-				if (pathParam.getMinimum() != null) {
-					value = pathParam.getMinimum().intValue() + 1;
-				} else if (pathParam.getMaximum() != null) {
-					value = pathParam.getMaximum().intValue() - 1;
-				}
-
-				request.setUrl(request.getUrl().replaceAll("\\{" + pathParam.getName() + "\\}", String.valueOf(value)));
-				break;
-			}
-			case "boolean": {
-				request.setUrl(
-						request.getUrl().replaceAll("\\{" + pathParam.getName() + "\\}", Boolean.toString(true)));
-				break;
-			}
-			case "array":
-				// TODO
-				break;
+			default:
+				log.error("The IN value is incorrect. Expected : 'body', 'query', 'path' or 'formData'. Given : '"
+						+ param.getIn() + "'.");
 			}
 		}
-		// TODO the others testType
 	}
 
-	public static void fillFormParameter(SwagRequest request, FormParameter formParam, TestType testType) {
-		switch (formParam.getType()) {
+	private static Object getParameterValue(SerializableParameter param, TestType testType) {
+		RandomGenerator generator = RandomGeneratorFactory.getRandomGenerator(testType);
+
+		switch (param.getType()) {
 		case "string": {
-			int min = stringDefaultMinLength;
-			int max = stringDefaultMaxLength;
+			int min = 5;
+			int max = 25;
 
-			if (formParam.getMaxLength() != null) {
-				max = formParam.getMaxLength();
+			if (param.getMaxLength() != null) {
+				max = param.getMaxLength();
 			}
 
-			if (formParam.getMinLength() != null) {
-				min = formParam.getMinLength();
+			if (param.getMinLength() != null) {
+				min = param.getMinLength();
 			}
 
-			request.getFormDataParameters().put(formParam.getName(), RandomGenerator.getString(min, max));
-			break;
+			return generator.getString(min, max); // TODO use the generator
 		}
 		case "number": {
 			double min = Double.MIN_VALUE;
 			double max = Double.MAX_VALUE;
 
-			if (formParam.getMinimum() != null) {
-				min = formParam.getMinimum();
+			if (param.getMinimum() != null) {
+				min = param.getMinimum();
 			}
 
-			if (formParam.getMaximum() != null) {
-				max = formParam.getMaximum();
+			if (param.getMaximum() != null) {
+				max = param.getMaximum();
 			}
 
-			request.getFormDataParameters().put(formParam.getName(),
-					String.valueOf(RandomGenerator.getDouble(min, max)));
-			break;
+			return generator.getDouble(min, max);
 		}
 		case "integer": {
 			int min = Integer.MIN_VALUE;
 			int max = Integer.MAX_VALUE;
 
-			if (formParam.getMinimum() != null) {
-				min = formParam.getMinimum().intValue();
+			if (param.getMinimum() != null) {
+				min = param.getMinimum().intValue();
 			}
 
-			if (formParam.getMaximum() != null) {
-				max = formParam.getMaximum().intValue();
+			if (param.getMaximum() != null) {
+				max = param.getMaximum().intValue();
 			}
 
-			request.getFormDataParameters().put(formParam.getName(), String.valueOf(RandomGenerator.getInt(min, max)));
-			break;
+			return generator.getInt(min, max);
 		}
-		case "boolean": {
-			request.getFormDataParameters().put(formParam.getName(), String.valueOf(RandomGenerator.getBool()));
-			break;
-		}
-		case "array": {
-			// TODO
-			break;
-		}
-		case "file": {
-			// TODO
-			break;
-		}
-		}
-	}
+		case "boolean":
+			return generator.getBool();
 
-	public static void fillHeaderParameter(SwagRequest request, HeaderParameter headerParam, TestType testType) {
-		switch (headerParam.getType()) {
-		case "string": {
-			int min = stringDefaultMinLength;
-			int max = stringDefaultMaxLength;
-
-			if (headerParam.getMaxLength() != null) {
-				max = headerParam.getMaxLength();
-			}
-
-			if (headerParam.getMinLength() != null) {
-				min = headerParam.getMinLength();
-			}
-
-			request.getHeaderParameters().put(headerParam.getName(), RandomGenerator.getString(min, max));
-			break;
-		}
-		case "number": {
-			double min = Double.MIN_VALUE;
-			double max = Double.MAX_VALUE;
-
-			if (headerParam.getMinimum() != null) {
-				min = headerParam.getMinimum();
-			}
-
-			if (headerParam.getMaximum() != null) {
-				max = headerParam.getMaximum();
-			}
-
-			request.getHeaderParameters().put(headerParam.getName(),
-					String.valueOf(RandomGenerator.getDouble(min, max)));
-			break;
-		}
-		case "integer": {
-			int min = Integer.MIN_VALUE;
-			int max = Integer.MAX_VALUE;
-
-			if (headerParam.getMinimum() != null) {
-				min = headerParam.getMinimum().intValue();
-			}
-
-			if (headerParam.getMaximum() != null) {
-				max = headerParam.getMaximum().intValue();
-			}
-
-			request.getHeaderParameters().put(headerParam.getName(), String.valueOf(RandomGenerator.getInt(min, max)));
-			break;
-		}
-		case "boolean": {
-			request.getHeaderParameters().put(headerParam.getName(), String.valueOf(RandomGenerator.getBool()));
-			break;
-		}
 		case "array":
 			// TODO
-			break;
-		}
-	}
-
-	public static void fillQueryParameter(SwagRequest request, QueryParameter queryParam, TestType testType) {
-		switch (queryParam.getType()) {
-		case "string": {
-			request.getQueryParameters().put(queryParam.getName(), RandomGenerator.getString(10));
-			break;
-		}
-		case "number": {
-			request.getQueryParameters().put(queryParam.getName(), String.valueOf(RandomGenerator.getDouble()));
-			break;
-		}
-		case "integer": {
-			request.getQueryParameters().put(queryParam.getName(), String.valueOf(RandomGenerator.getInt(1000)));
-			break;
-		}
-		case "boolean": {
-			request.getQueryParameters().put(queryParam.getName(), String.valueOf(RandomGenerator.getBool()));
-			break;
-		}
-		case "array":
-			// TODO
-			break;
+			return null;
+		default:
+			return null;
 		}
 	}
 }
