@@ -86,16 +86,16 @@ public class TestSwagTester {
 
 				if (entry.getMethod() != null) {
 					SwagAssert.assertValid(entry.getMethod().validTest());
-					SwagAssert.assertValid(entry.getMethod().invalidTest());
-					SwagAssert.assertValid(entry.getMethod().scalingTest());
+					// SwagAssert.assertValid(entry.getMethod().invalidTest());
+					// SwagAssert.assertValid(entry.getMethod().scalingTest());
 					// SwagAssert.assertValid(entry.getMethod().extremValuesTest());
 					// SwagAssert.assertValid(entry.getMethod().timeoutTest(1000));
 				}
 
 				if (entry.headMethod() != null) {
 					SwagAssert.assertValid(entry.headMethod().validTest());
-					SwagAssert.assertValid(entry.headMethod().invalidTest());
-					SwagAssert.assertValid(entry.headMethod().scalingTest());
+					// SwagAssert.assertValid(entry.headMethod().invalidTest());
+					// SwagAssert.assertValid(entry.headMethod().scalingTest());
 					// SwagAssert.assertValid(entry.headMethod().extremValuesTest());
 					// SwagAssert.assertValid(entry.headMethod().timeoutTest(1000));
 				}

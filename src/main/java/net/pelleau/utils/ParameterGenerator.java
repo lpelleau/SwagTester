@@ -101,8 +101,7 @@ public final class ParameterGenerator {
 			return generator.getBool();
 
 		case "array":
-			// TODO
-			return null;
+			return "available";
 		default:
 			return null;
 		}

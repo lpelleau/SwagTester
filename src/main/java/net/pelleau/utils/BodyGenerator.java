@@ -162,13 +162,7 @@ public final class BodyGenerator {
 	}
 
 	public static Object fillBody(Swagger swagger, Model model, TestType type) {
-		RandomGenerator gen = null;
-
-		switch (type) {
-		case VALID:
-			gen = new ValidRandomGenerator();
-			break;
-		}
+		RandomGenerator gen = RandomGeneratorFactory.getRandomGenerator(type);
 
 		if (model instanceof ArrayModel) {
 			ArrayProperty property = new ArrayProperty();

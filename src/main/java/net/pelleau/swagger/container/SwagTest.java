@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
@@ -14,6 +17,8 @@ import com.mashape.unirest.request.HttpRequestWithBody;
  * Represents a testCase
  */
 public class SwagTest {
+
+	private static Logger log = LoggerFactory.getLogger(SwagTest.class);
 
 	private SwagRequest request;
 	private SwagResponse response;
