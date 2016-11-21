@@ -8,17 +8,11 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import io.swagger.models.HttpMethod;
 import io.swagger.models.Operation;
 import io.swagger.models.Swagger;
-import io.swagger.models.parameters.BodyParameter;
-import io.swagger.models.parameters.FormParameter;
-import io.swagger.models.parameters.HeaderParameter;
-import io.swagger.models.parameters.PathParameter;
-import io.swagger.models.parameters.QueryParameter;
 import net.pelleau.swagger.SwagRequest;
 import net.pelleau.swagger.SwagResponse;
 import net.pelleau.swagger.SwagTest;
 import net.pelleau.swagger.SwagTester;
 import net.pelleau.utils.ParameterGenerator;
-import net.pelleau.utils.ValidRandomGenerator;
 
 public abstract class Method {
 

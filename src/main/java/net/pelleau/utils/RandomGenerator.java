@@ -141,4 +141,9 @@ interface RandomGenerator {
 	 */
 	String getTodayDateTime();
 
+	/**
+	 * @return returns a random Date with "AAAA-MM-DD" (ex: "1970-01-01")
+	 *         format.
+	 */
+	String getDate();
 }

@@ -23,7 +23,7 @@ public final class ParameterGenerator {
 		if (param.getIn().equals("body")) {
 			BodyParameter bodyParam = (BodyParameter) param;
 
-			Object value = BodyGenerator.fillBody(swagger, bodyParam.getSchema());
+			Object value = BodyGenerator.fillBody(swagger, bodyParam.getSchema(), testType);
 
 			request.setBodyParameters(value);
 		} else {
