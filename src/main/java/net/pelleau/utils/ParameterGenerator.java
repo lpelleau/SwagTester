@@ -7,6 +7,10 @@ import io.swagger.models.Swagger;
 import io.swagger.models.parameters.BodyParameter;
 import io.swagger.models.parameters.Parameter;
 import io.swagger.models.parameters.SerializableParameter;
+import io.swagger.models.properties.BooleanProperty;
+import io.swagger.models.properties.DoubleProperty;
+import io.swagger.models.properties.LongProperty;
+import io.swagger.models.properties.StringProperty;
 import net.pelleau.swagger.container.SwagRequest;
 import net.pelleau.swagger.methods.TestType;
 
@@ -101,9 +105,61 @@ public final class ParameterGenerator {
 			return generator.getBool();
 
 		case "array":
-			return "available";
+			return "available";// getArray(generator, param);
 		default:
 			return null;
 		}
+	}
+
+	private static String getArray(RandomGenerator generator, SerializableParameter param) {
+		String res = "";
+		String separator = "";
+		switch (param.getCollectionFormat()) {
+		default:
+		case "csv":
+			separator = ",";
+			break;
+		case "ssv":
+			separator = " ";
+			break;
+		case "tsv":
+			separator = "\\";
+			break;
+		case "pipes":
+			separator = "|";
+			break;
+		}
+
+		switch (param.getItems().getType()) {
+		case "string": {
+			StringProperty property = (StringProperty) param.getItems();
+			for (String val : property.getEnum()) {
+				if (generator.getBool()) {
+					res += val + separator;
+				}
+			}
+			break;
+		}
+
+		case "number": {
+			DoubleProperty property = (DoubleProperty) param.getItems();
+			break;
+		}
+
+		case "integer": {
+			LongProperty property = (LongProperty) param.getItems();
+			break;
+		}
+
+		case "boolean": {
+			BooleanProperty property = (BooleanProperty) param.getItems();
+			break;
+		}
+
+		case "array": {
+			break;
+		}
+		}
+		return res;
 	}
 }
