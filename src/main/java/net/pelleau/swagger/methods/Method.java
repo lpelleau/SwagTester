@@ -100,7 +100,7 @@ public abstract class Method {
 				case "body": {
 					BodyParameter bodyParam = (BodyParameter) param;
 
-					String body = RandomGenerator.fillBody(bodyParam.getSchema(), swagger);
+					Object body = RandomGenerator.fillBody(bodyParam.getSchema(), swagger);
 					request.setBodyParameters(body);
 
 					break;

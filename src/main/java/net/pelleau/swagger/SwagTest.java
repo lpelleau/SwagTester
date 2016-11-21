@@ -2,6 +2,7 @@ package net.pelleau.swagger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
@@ -62,20 +63,22 @@ public class SwagTest {
 				call.queryString(request.getQueryParameters());
 			}
 
-			if (!request.getHeaderParameters().isEmpty()) {
-				call.headers(request.getHeaderParameters());
-			}
+			Map<String, String> headers = request.getHeaderParameters();
 
 			if (call instanceof HttpRequestWithBody) {
 				HttpRequestWithBody complexCall = (HttpRequestWithBody) call;
 
 				if (request.getBodyParameters() != null) {
-					complexCall.body(request.getBodyParameters());
+					headers.put("Content-Type", "application/json");
+					complexCall.body(request.getBodyParameters().toString());
 				} else if (!request.getFormDataParameters().isEmpty()) {
+					headers.put("Content-Type", "multipart/form-data");
 					complexCall.fields(request.getFormDataParameters());
 				}
 
 			}
+
+			call.headers(headers);
 
 			long begin = System.currentTimeMillis();
 			HttpResponse<String> input = call.asString();

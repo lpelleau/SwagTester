@@ -101,7 +101,7 @@ public class TestSwagTester {
 				}
 
 				if (entry.postMethod() != null) {
-					// SwagAssert.assertValid(entry.postMethod().validTest());
+					SwagAssert.assertValid(entry.postMethod().validTest());
 					// SwagAssert.assertValid(entry.postMethod().invalidTest());
 					// SwagAssert.assertValid(entry.postMethod().scalingTest());
 					// SwagAssert.assertValid(entry.postMethod().extremValuesTest());
@@ -109,7 +109,7 @@ public class TestSwagTester {
 				}
 
 				if (entry.putMethod() != null) {
-					// SwagAssert.assertValid(entry.putMethod().validTest());
+					SwagAssert.assertValid(entry.putMethod().validTest());
 					// SwagAssert.assertValid(entry.putMethod().invalidTest());
 					// SwagAssert.assertValid(entry.putMethod().scalingTest());
 					// SwagAssert.assertValid(entry.putMethod().extremValuesTest());
@@ -117,7 +117,7 @@ public class TestSwagTester {
 				}
 
 				if (entry.patchMethod() != null) {
-					// SwagAssert.assertValid(entry.patchMethod().validTest());
+					SwagAssert.assertValid(entry.patchMethod().validTest());
 					// SwagAssert.assertValid(entry.patchMethod().invalidTest());
 					// SwagAssert.assertValid(entry.patchMethod().scalingTest());
 					// SwagAssert.assertValid(entry.patchMethod().extremValuesTest());
@@ -125,7 +125,7 @@ public class TestSwagTester {
 				}
 
 				if (entry.optionsMethod() != null) {
-					// SwagAssert.assertValid(entry.optionsMethod().validTest());
+					SwagAssert.assertValid(entry.optionsMethod().validTest());
 					// SwagAssert.assertValid(entry.optionsMethod().invalidTest());
 					// SwagAssert.assertValid(entry.optionsMethod().scalingTest());
 					// SwagAssert.assertValid(entry.optionsMethod().extremValuesTest());
@@ -133,7 +133,7 @@ public class TestSwagTester {
 				}
 
 				if (entry.deleteMethod() != null) {
-					// SwagAssert.assertValid(entry.deleteMethod().validTest());
+					SwagAssert.assertValid(entry.deleteMethod().validTest());
 					// SwagAssert.assertValid(entry.deleteMethod().invalidTest());
 					// SwagAssert.assertValid(entry.deleteMethod().scalingTest());
 					// SwagAssert.assertValid(entry.deleteMethod().extremValuesTest());

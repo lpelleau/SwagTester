@@ -19,7 +19,7 @@ public class SwagRequest {
 
 	private Map<String, String> headerParameters;
 	private Map<String, Object> queryParameters;
-	private String bodyParameters;
+	private Object bodyParameters;
 	private Map<String, Object> formDataParameters;
 
 	public String getUrl() {
@@ -46,11 +46,11 @@ public class SwagRequest {
 		this.testType = testType;
 	}
 
-	public String getBodyParameters() {
+	public Object getBodyParameters() {
 		return bodyParameters;
 	}
 
-	public void setBodyParameters(String bodyParameters) {
+	public void setBodyParameters(Object bodyParameters) {
 		this.bodyParameters = bodyParameters;
 	}
 

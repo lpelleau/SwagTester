@@ -239,11 +239,11 @@ public final class RandomGenerator {
 	 * 
 	 * @param swag
 	 */
-	public static String fillBody(Model model, Swagger swagger) {
+	public static Object fillBody(Model model, Swagger swagger) {
 		if (model.getReference() != null) { // Simple type
 			Model type = getDefinition(swagger, model.getReference());
 
-			return (type != null) ? fillType(swagger, type).toString() : "";
+			return (type != null) ? fillType(swagger, type) : new JSONObject();
 
 		} else { // Array of type
 			JSONArray res = new JSONArray();
@@ -254,7 +254,7 @@ public final class RandomGenerator {
 				res.put(fillType(swagger, type));
 			}
 
-			return res.toString();
+			return res;
 		}
 	}
 
