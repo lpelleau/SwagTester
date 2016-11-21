@@ -17,6 +17,7 @@ import net.pelleau.swagger.SwagRequest;
 import net.pelleau.swagger.SwagResponse;
 import net.pelleau.swagger.SwagTest;
 import net.pelleau.swagger.SwagTester;
+import net.pelleau.utils.BodyGenerator;
 import net.pelleau.utils.ParameterGenerator;
 import net.pelleau.utils.RandomGenerator;
 
@@ -100,7 +101,7 @@ public abstract class Method {
 				case "body": {
 					BodyParameter bodyParam = (BodyParameter) param;
 
-					Object body = RandomGenerator.fillBody(bodyParam.getSchema(), swagger);
+					Object body = BodyGenerator.fillBody(swagger, bodyParam.getSchema());
 					request.setBodyParameters(body);
 
 					break;

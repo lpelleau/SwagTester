@@ -235,158 +235,6 @@ public final class RandomGenerator {
 	}
 
 	/**
-	 * Not implemented yet !
-	 * 
-	 * @param swag
-	 */
-	public static Object fillBody(Model model, Swagger swagger) {
-		if (model.getReference() != null) { // Simple type
-			Model type = getDefinition(swagger, model.getReference());
-
-			return (type != null) ? fillType(swagger, type) : new JSONObject();
-
-		} else { // Array of type
-			JSONArray res = new JSONArray();
-			ArrayModel arrayModel = (ArrayModel) model;
-			Model type = getDefinition(swagger, ((RefProperty) arrayModel.getItems()).get$ref());
-
-			for (int i = getInt(50); i >= 0; --i) {
-				res.put(fillType(swagger, type));
-			}
-
-			return res;
-		}
-	}
-
-	private static Model getDefinition(Swagger swagger, String ref) {
-		Matcher m = Pattern.compile("/([A-Za-z]+)$").matcher(ref);
-
-		if (m.find()) {
-			return swagger.getDefinitions().get(m.group(1));
-		}
-		return null;
-	}
-
-	private static JSONObject fillType(Swagger swagger, Model definition) {
-		JSONObject res = new JSONObject();
-
-		for (Entry<String, Property> entry : definition.getProperties().entrySet()) {
-			res.put(entry.getKey(), getProperty(swagger, entry.getValue()));
-		}
-
-		return res;
-	}
-
-	private static Object getProperty(Swagger swagger, Property property) {
-		Object res = null;
-		String type = property.getType() == null ? "" : property.getType();
-		String format = property.getFormat() == null ? "" : property.getFormat();
-
-		switch (type) {
-		case "integer": {
-
-			switch (format) {
-			case "int32": {
-				res = String.valueOf(getInt());
-				break;
-			}
-			case "int64": {
-				res = String.valueOf(getLong());
-				break;
-			}
-			default: {
-			}
-			}
-
-			break;
-		}
-		case "number": {
-
-			switch (format) {
-			case "float": {
-				res = String.valueOf(getFloat());
-				break;
-			}
-			case "double": {
-				res = String.valueOf(getDouble());
-				break;
-			}
-			default: {
-			}
-			}
-
-			break;
-		}
-		case "boolean": {
-
-			res = String.valueOf(getBool());
-
-			break;
-		}
-		case "string": {
-
-			switch (format) {
-			case "password":
-			case "": {
-				res = getString(getInt(20));
-				break;
-			}
-			case "byte": {
-				res = new String(Base64.encodeBase64((getString(getInt(20)).getBytes())));
-				break;
-			}
-			case "binary": {
-				res = new String(getString(getInt(20)).getBytes());
-				break;
-			}
-			case "date": {
-				res = getNumericString(4) + "-" + getNumericString(2) + "-" + getNumericString(2);
-				break;
-			}
-			case "date-time": {
-				res = getDateTime();
-				break;
-			}
-			default: {
-			}
-			}
-
-			break;
-		}
-		case "ref":
-			RefProperty refProp = (RefProperty) property;
-			Model refT = getDefinition(swagger, refProp.get$ref());
-			if (refT != null) {
-				res = fillType(swagger, refT);
-			}
-
-			break;
-		case "array":
-			res = new JSONArray();
-
-			ArrayProperty arrayProp = (ArrayProperty) property;
-			try {
-				refProp = (RefProperty) arrayProp.getItems();
-				refT = getDefinition(swagger, refProp.get$ref());
-
-				for (int i = getInt(50); i >= 0; --i) {
-					((JSONArray) res).put(fillType(swagger, refT));
-				}
-
-			} catch (ClassCastException e) {
-				// Not a reference to a definition: simple property
-				for (int i = getInt(50); i >= 0; --i) {
-					((JSONArray) res).put(getProperty(swagger, arrayProp.getItems()));
-				}
-			}
-			break;
-		default: {
-		}
-		}
-		return res;
-	}
-
-	/**
 	 * @return returns a random DateTime with "AAAA-MM-DDTHH:MM:SS.MMMZ" (ex:
 	 *         "1970-01-01T00:00:00.001Z") format.
 	 */
@@ -402,5 +250,13 @@ public final class RandomGenerator {
 	public static String getTodayDateTime() {
 		return new Timestamp(System.currentTimeMillis()).toInstant().toString();
 
+	}
+
+	/**
+	 * @return returns a random Date with "AAAA-MM-DD" (ex: "1970-01-01")
+	 *         format.
+	 */
+	public static String getDate() {
+		return getNumericString(4) + "-" + getNumericString(2) + "-" + getNumericString(2);
 	}
 }
