@@ -7,7 +7,7 @@ import io.swagger.models.Swagger;
 import io.swagger.models.parameters.BodyParameter;
 import io.swagger.models.parameters.Parameter;
 import io.swagger.models.parameters.SerializableParameter;
-import net.pelleau.swagger.SwagRequest;
+import net.pelleau.swagger.container.SwagRequest;
 import net.pelleau.swagger.methods.TestType;
 
 public final class ParameterGenerator {

@@ -1,4 +1,4 @@
-package net.pelleau.swagger;
+package net.pelleau.swagger.container;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -8,10 +8,10 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import io.swagger.models.HttpMethod;
 import io.swagger.models.Operation;
 import io.swagger.models.Swagger;
-import net.pelleau.swagger.SwagRequest;
-import net.pelleau.swagger.SwagResponse;
-import net.pelleau.swagger.SwagTest;
 import net.pelleau.swagger.SwagTester;
+import net.pelleau.swagger.container.SwagRequest;
+import net.pelleau.swagger.container.SwagResponse;
+import net.pelleau.swagger.container.SwagTest;
 import net.pelleau.utils.ParameterGenerator;
 
 public abstract class Method {

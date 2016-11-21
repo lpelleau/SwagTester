@@ -2,8 +2,8 @@ package net.pelleau.utils;
 
 import org.junit.Assert;
 
-import net.pelleau.swagger.SwagResponse;
-import net.pelleau.swagger.SwagTest;
+import net.pelleau.swagger.container.SwagResponse;
+import net.pelleau.swagger.container.SwagTest;
 
 public final class SwagAssert extends Assert {
 
