@@ -1,18 +1,44 @@
 package net.pelleau.utils;
 
 import org.junit.Assert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import net.pelleau.swagger.container.SwagResponse;
 import net.pelleau.swagger.container.SwagTest;
 
 public final class SwagAssert extends Assert {
 
+	private static Logger log = LoggerFactory.getLogger(SwagAssert.class);
+
 	private SwagAssert() {
 	}
 
 	public static void assertValid(SwagTest test) {
-		if (test == null || !test.isValid()) {
-			fail();
+		assertValid(test, false);
+	}
+
+	public static void assertValid(SwagTest test, boolean strictWithDeprecated) {
+		log.debug("\tTYPE => \t" + test.getRequest().getTestType());
+		log.debug("\tREQUEST => \t" + test.getRequest().toString());
+		log.debug("\tEXPECTED => \t" + test.getExpectedValues().toString());
+		log.debug("\tRESPONSE => \t" + test.getResponse().toString());
+
+		try {
+			if (test == null || !test.isValid()) {
+				log.debug("\tRESULT => \tFAIL");
+				fail();
+			} else {
+				log.debug("\tRESULT => \tOK");
+			}
+		} catch (RuntimeException e) {
+			if (strictWithDeprecated) {
+				log.debug("\tRESULT => \tFAIL");
+				fail();
+			} else {
+				log.debug("\tRESULT => \tFAIL");
+				log.warn("The test fails, but the Entrypoint is deprecated. Ignored.");
+			}
 		}
 	}
 

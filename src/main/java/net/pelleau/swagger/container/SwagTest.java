@@ -1,8 +1,8 @@
 package net.pelleau.swagger.container;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +18,7 @@ import com.mashape.unirest.request.HttpRequestWithBody;
  */
 public class SwagTest {
 
+	@SuppressWarnings("unused")
 	private static Logger log = LoggerFactory.getLogger(SwagTest.class);
 
 	private SwagRequest request;
@@ -35,10 +36,14 @@ public class SwagTest {
 	}
 
 	public void execute() throws UnirestException {
-
 		if (request != null && request.getUrl() != null) {
-
 			HttpRequest call = null;
+
+			// apply path parameters
+			if (!request.getPathParameters().isEmpty()) {
+				request.getPathParameters()
+						.forEach((pName, pValue) -> request.getUrl().replaceAll("\\{" + pName + "\\}", pValue));
+			}
 
 			switch (request.getMethod()) {
 			case GET:
@@ -62,29 +67,35 @@ public class SwagTest {
 			case PATCH:
 				call = Unirest.patch(request.getUrl());
 				break;
+			default:
+				throw new RuntimeException("This HttpRequest is not supported.");
 			}
 
+			// apply query parameters
 			if (!request.getQueryParameters().isEmpty()) {
 				call.queryString(request.getQueryParameters());
 			}
 
-			Map<String, String> headers = request.getHeaderParameters();
+			// apply header parameters
+			if (!request.getHeaderParameters().isEmpty()) {
+				call.headers(request.getHeaderParameters());
+			}
 
+			// apply body or form parameters
 			if (call instanceof HttpRequestWithBody) {
 				HttpRequestWithBody complexCall = (HttpRequestWithBody) call;
 
 				if (request.getBodyParameters() != null) {
-					headers.put("Content-Type", "application/json");
+					if (!call.getHeaders().containsKey("Content-Type")) {
+						call.getHeaders().put("Content-Type", Collections.singletonList("application/json"));
+					}
 					complexCall.body(request.getBodyParameters().toString());
 				} else if (!request.getFormDataParameters().isEmpty()) {
-					headers.put("Content-Type", "multipart/form-data");
 					complexCall.fields(request.getFormDataParameters());
 				}
-
 			}
 
-			call.headers(headers);
-
+			// call the web Api with responseTime
 			long begin = System.currentTimeMillis();
 			HttpResponse<String> input = call.asString();
 			long elapsed = System.currentTimeMillis() - begin;
@@ -120,12 +131,18 @@ public class SwagTest {
 			}
 
 			if (valid && current.getBody() != null) {
+				// TODO try to have a regex or a matching tool to have joker
+				// char in case we can't predict the answer
 				valid &= current.getBody().equals(response.getBody());
 			}
 
 			if (valid) {
 				return valid;
 			}
+		}
+
+		if (request.isDeprecated()) {
+			throw new RuntimeException("The test fail but this entrypoint is deprecated.");
 		}
 
 		return false;

@@ -17,10 +17,13 @@ public class SwagRequest {
 
 	private TestType testType;
 
+	private Map<String, String> pathParameters;
 	private Map<String, String> headerParameters;
 	private Map<String, Object> queryParameters;
 	private Object bodyParameters;
 	private Map<String, Object> formDataParameters;
+
+	private boolean deprecated;
 
 	public String getUrl() {
 		return url;
@@ -54,6 +57,13 @@ public class SwagRequest {
 		this.bodyParameters = bodyParameters;
 	}
 
+	public Map<String, String> getPathParameters() {
+		if (pathParameters == null) {
+			pathParameters = new HashMap<String, String>();
+		}
+		return pathParameters;
+	}
+
 	public Map<String, String> getHeaderParameters() {
 		if (headerParameters == null) {
 			headerParameters = new HashMap<String, String>();
@@ -73,6 +83,14 @@ public class SwagRequest {
 			formDataParameters = new HashMap<String, Object>();
 		}
 		return formDataParameters;
+	}
+
+	public void setDeprecated(boolean deprecated) {
+		this.deprecated = deprecated;
+	}
+
+	public boolean isDeprecated() {
+		return this.deprecated;
 	}
 
 	@Override

@@ -58,6 +58,8 @@ class EntryPointImpl implements EntryPoint {
 				case PUT:
 					method = new PutMethod(swagger, swag, name, path.getOperationMap().get(httpMethod));
 					break;
+				default:
+					throw new RuntimeException("This HttpMethod is not supported");
 				}
 			}
 

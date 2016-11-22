@@ -146,7 +146,63 @@ public class TestSwagTester {
 	@Test
 	public void testSth() {
 		// swagger.entryPoint("/pet").postMethod().validTest(); // Simple object
-		swagger.entryPoint("/user/createWithArray").postMethod().validTest(); // Array
-																				// object
+		SwagAssert.assertValid(swagger.entryPoint("/user/createWithArray").postMethod().validTest()); // Array
+		// object
+	}
+
+	@Test
+	public void testOnlyGetMethod() {
+		swagger.entryPoints().forEach((name, entry) -> {
+			log.debug("Testing : " + entry.toString());
+			if (entry.getMethod() != null) {
+				SwagAssert.assertValid(entry.getMethod().validTest());
+				SwagAssert.assertValid(entry.getMethod().invalidTest());
+				SwagAssert.assertValid(entry.getMethod().extremValuesTest());
+				// SwagAssert.assertValid(entry.getMethod().scalingTest());
+				// SwagAssert.assertValid(entry.getMethod().timeoutTest(1000));
+			}
+		});
+	}
+
+	@Test
+	public void testOnlyPostMethod() {
+		swagger.entryPoints().forEach((name, entry) -> {
+			log.debug("Testing : " + entry.toString());
+			if (entry.postMethod() != null) {
+				SwagAssert.assertValid(entry.postMethod().validTest());
+				SwagAssert.assertValid(entry.postMethod().invalidTest());
+				SwagAssert.assertValid(entry.postMethod().extremValuesTest());
+				// SwagAssert.assertValid(entry.postMethod().scalingTest());
+				// SwagAssert.assertValid(entry.postMethod().timeoutTest(1000));
+			}
+		});
+	}
+
+	@Test
+	public void testOnlyPutMethod() {
+		swagger.entryPoints().forEach((name, entry) -> {
+			log.debug("Testing : " + entry.toString());
+			if (entry.putMethod() != null) {
+				SwagAssert.assertValid(entry.putMethod().validTest());
+				SwagAssert.assertValid(entry.putMethod().invalidTest());
+				SwagAssert.assertValid(entry.putMethod().extremValuesTest());
+				// SwagAssert.assertValid(entry.putMethod().scalingTest());
+				// SwagAssert.assertValid(entry.putMethod().timeoutTest(1000));
+			}
+		});
+	}
+
+	@Test
+	public void testOnlyDeleteMethod() {
+		swagger.entryPoints().forEach((name, entry) -> {
+			log.debug("Testing : " + entry.toString());
+			if (entry.deleteMethod() != null) {
+				SwagAssert.assertValid(entry.deleteMethod().validTest());
+				SwagAssert.assertValid(entry.deleteMethod().invalidTest());
+				SwagAssert.assertValid(entry.deleteMethod().extremValuesTest());
+				// SwagAssert.assertValid(entry.deleteMethod().scalingTest());
+				// SwagAssert.assertValid(entry.deleteMethod().timeoutTest(1000));
+			}
+		});
 	}
 }

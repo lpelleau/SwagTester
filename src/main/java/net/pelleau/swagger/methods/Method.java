@@ -12,10 +12,11 @@ import net.pelleau.swagger.SwagTester;
 import net.pelleau.swagger.container.SwagRequest;
 import net.pelleau.swagger.container.SwagResponse;
 import net.pelleau.swagger.container.SwagTest;
-import net.pelleau.utils.ParameterGenerator;
+import net.pelleau.swagger.generator.ParameterGenerator;
 
 public abstract class Method {
 
+	@SuppressWarnings("unused")
 	private static Logger log = LoggerFactory.getLogger(Method.class);
 
 	private Swagger swagger;
@@ -48,11 +49,18 @@ public abstract class Method {
 		request.setUrl(swag.getHost());
 		request.setMethod(getHttpMethod());
 
+		request.setDeprecated((operation.isDeprecated() != null ? operation.isDeprecated() : false));
+
 		// add http accept header
 		if (operation.getProduces() != null && !operation.getProduces().isEmpty()) {
-			operation.getProduces().forEach(pro -> {
-				request.getHeaderParameters().put("accept", pro);
-			});
+			operation.getProduces().forEach(pro -> request.getHeaderParameters().put("accept", pro));
+		}
+
+		// add http content-type header
+		if (operation.getConsumes() != null && !operation.getConsumes().isEmpty()) {
+			// TODO may ignore application/xml
+			// TODO may limit this to one entry
+			operation.getProduces().forEach(con -> request.getHeaderParameters().put("Content-Type", con));
 		}
 
 		// add endPoint to the url
@@ -66,20 +74,20 @@ public abstract class Method {
 
 		// generate expected responses
 		operation.getResponses().forEach((code, value) -> {
-			// TODO deal with "default" possible statusCode
-			if (!code.equals("default")) {
 
-				SwagResponse expected = new SwagResponse();
+			String stringCode = (code.equals("default") ? "200" : code);
 
-				expected.setStatusCode(Integer.valueOf(code));
+			SwagResponse expected = new SwagResponse();
 
-				// TODO try to check the description value
+			expected.setStatusCode(Integer.valueOf(stringCode));
 
-				// TODO deal with value.getSchema() when the response have a
-				// body part
+			// TODO try to check the description value
 
-				testCase.getExpectedValues().add(expected);
-			}
+			// TODO deal with value.getSchema() when the response have a
+			// body part
+
+			testCase.getExpectedValues().add(expected);
+
 		});
 
 		// add the default 200 statusCode if needed
@@ -91,13 +99,11 @@ public abstract class Method {
 
 		// call the web api with the given parameters in request object
 		try {
-
 			testCase.execute();
 
 			return testCase;
-
 		} catch (UnirestException e) {
-			return null;
+			throw new RuntimeException("Something went wrong calling the web API.");
 		}
 	}
 

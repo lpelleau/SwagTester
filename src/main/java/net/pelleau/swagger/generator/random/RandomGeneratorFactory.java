@@ -1,4 +1,4 @@
-package net.pelleau.utils;
+package net.pelleau.swagger.generator.random;
 
 import net.pelleau.swagger.methods.TestType;
 
@@ -9,36 +9,37 @@ public final class RandomGeneratorFactory {
 
 	private static ValidRandomGenerator valid;
 	private static InvalidRandomGenerator invalid;
-	//
-	//
+	private static ScalingRandomGenerator scaling;
+	private static ExtremeRandomGenerator extreme;
 
 	public static RandomGenerator getRandomGenerator(TestType testType) {
 		switch (testType) {
 		case VALID:
 		case TIMEOUT:
 			return getValidRandomGenerator();
-
 		case INVALID:
 			return getInvalidRandomGenerator();
-
 		case SCALLING:
 			return getScallingRandomGenerator();
-
 		case EXTREME_VALUES:
 			return getExtremeRandomGenerator();
 		default:
-			return null;
+			throw new RuntimeException("This TestType is not supported.");
 		}
 	}
 
 	private static RandomGenerator getExtremeRandomGenerator() {
-		// TODO Auto-generated method stub
-		return null;
+		if (extreme == null) {
+			extreme = new ExtremeRandomGenerator();
+		}
+		return extreme;
 	}
 
 	private static RandomGenerator getScallingRandomGenerator() {
-		// TODO Auto-generated method stub
-		return null;
+		if (scaling == null) {
+			scaling = new ScalingRandomGenerator();
+		}
+		return scaling;
 	}
 
 	private static RandomGenerator getInvalidRandomGenerator() {
