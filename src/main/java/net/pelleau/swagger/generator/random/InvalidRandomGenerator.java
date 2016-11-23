@@ -36,8 +36,8 @@ final class InvalidRandomGenerator implements RandomGenerator {
 
 	@Override
 	public String getString(int minLength, int maxLength) {
-		if (rng.nextBoolean()) {
-			return RandomStringUtils.random((int) rng.nextLong(0, minLength), 0, 0, true, false, null, rng);
+		if (rng.nextBoolean() && minLength > 1) {
+			return RandomStringUtils.random((int) rng.nextLong(1, minLength), 0, 0, true, false, null, rng);
 		} else {
 			return RandomStringUtils.random((int) rng.nextLong(maxLength, 250), 0, 0, true, false, null, rng);
 		}
@@ -55,10 +55,6 @@ final class InvalidRandomGenerator implements RandomGenerator {
 	}
 
 	private String getNumericString(int length) {
-		if (rng.nextBoolean()) {
-			return RandomStringUtils.random((int) rng.nextLong(0, length), 0, 0, false, true, null, rng);
-		} else {
-			return RandomStringUtils.random((int) rng.nextLong(length + 1, 250), 0, 0, false, true, null, rng);
-		}
+		return RandomStringUtils.random(length, 0, 0, false, true, null, rng);
 	}
 }

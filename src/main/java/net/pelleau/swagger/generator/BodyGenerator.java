@@ -13,7 +13,8 @@ import io.swagger.models.Model;
 import io.swagger.models.Swagger;
 import io.swagger.models.properties.ArrayProperty;
 import io.swagger.models.properties.BaseIntegerProperty;
-import io.swagger.models.properties.BooleanProperty;
+import io.swagger.models.properties.DateProperty;
+import io.swagger.models.properties.DateTimeProperty;
 import io.swagger.models.properties.DecimalProperty;
 import io.swagger.models.properties.Property;
 import io.swagger.models.properties.RefProperty;
@@ -107,10 +108,20 @@ public final class BodyGenerator {
 	public static Object fillProperty(Swagger swagger, RandomGenerator gen, Property property) {
 		switch (property.getType()) {
 		case "string":
-			StringProperty stringProp = (StringProperty) property;
-			return FormatGenerator.getString(gen, stringProp.getFormat(),
-					(stringProp.getMinLength() != null ? stringProp.getMinLength() : 1),
-					(stringProp.getMaxLength() != null ? stringProp.getMaxLength() : 25));
+			if (property instanceof StringProperty) {
+				StringProperty stringProp = (StringProperty) property;
+				return FormatGenerator.getString(gen, stringProp.getFormat(),
+						(stringProp.getMinLength() != null ? stringProp.getMinLength() : 1),
+						(stringProp.getMaxLength() != null ? stringProp.getMaxLength() : 25));
+			} else if (property instanceof DateTimeProperty) {
+				DateTimeProperty dateTimeProp = (DateTimeProperty) property;
+				return FormatGenerator.getString(gen, dateTimeProp.getFormat(), 0, 0);
+			} else if (property instanceof DateProperty) {
+				DateProperty dateProp = (DateProperty) property;
+				return FormatGenerator.getString(gen, dateProp.getFormat(), 0, 0);
+			} else {
+				throw new RuntimeException("This String format is not supported.");
+			}
 		case "integer":
 			BaseIntegerProperty intProp = (BaseIntegerProperty) property;
 			return FormatGenerator.getInteger(gen, intProp.getFormat(),
@@ -122,8 +133,7 @@ public final class BodyGenerator {
 					(numberProp.getMinimum() != null ? numberProp.getMinimum() : Double.MIN_VALUE),
 					(numberProp.getMaximum() != null ? numberProp.getMaximum() : Double.MAX_VALUE));
 		case "boolean":
-			BooleanProperty boolProp = (BooleanProperty) property;
-			return FormatGenerator.getBoolean(gen, boolProp.getFormat());
+			return FormatGenerator.getBoolean(gen);
 		case "ref":
 			return getRef(swagger, gen, (RefProperty) property);
 		case "array":

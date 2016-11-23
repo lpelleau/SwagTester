@@ -1,5 +1,6 @@
 package net.pelleau.swagger.generator;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.StringJoiner;
 import java.util.stream.Collector;
@@ -64,7 +65,6 @@ public final class ParameterGenerator {
 	private static Object getParameterValue(Swagger swagger, SerializableParameter param, TestType testType) {
 		RandomGenerator generator = RandomGeneratorFactory.getRandomGenerator(testType);
 		if (param.getRequired() || generator.getBool()) {
-
 			switch (param.getType()) {
 			case "string":
 				return FormatGenerator.getString(generator, param.getFormat(),
@@ -79,15 +79,16 @@ public final class ParameterGenerator {
 						(param.getMinLength() != null ? param.getMinLength() : Integer.MIN_VALUE),
 						(param.getMaxLength() != null ? param.getMaxLength() : Integer.MAX_VALUE));
 			case "boolean":
-				return FormatGenerator.getBoolean(generator, param.getFormat());
+				return FormatGenerator.getBoolean(generator);
 			case "array":
 				return getArray(swagger, generator, param,
 						(param.getMinItems() != null ? param.getMinItems() : (param.getRequired() ? 1 : 0)),
 						(param.getMaxItems() != null ? param.getMaxItems() : 10));
+			case "file":
+				return getFile();
 			default:
 				throw new RuntimeException("This type is not supported (" + param.getType() + ").");
 			}
-
 		} else {
 			return null;
 		}
@@ -140,5 +141,9 @@ public final class ParameterGenerator {
 		// return a String assembled with separator
 		return array.stream().collect(Collector.of(() -> new StringJoiner(separator), (j, p) -> j.add(p.toString()),
 				(j1, j2) -> j1.merge(j2), StringJoiner::toString));
+	}
+
+	private static File getFile() {
+		return new File(ParameterGenerator.class.getClassLoader().getResource("random_image.png").getPath());
 	}
 }

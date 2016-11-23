@@ -1,8 +1,8 @@
 package net.pelleau.swagger.container;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+import com.mashape.unirest.request.BaseRequest;
 import com.mashape.unirest.request.HttpRequest;
 import com.mashape.unirest.request.HttpRequestWithBody;
 
@@ -37,14 +38,9 @@ public class SwagTest {
 
 	public void execute() throws UnirestException {
 		if (request != null && request.getUrl() != null) {
-			HttpRequest call = null;
+			BaseRequest call = null;
 
-			// apply path parameters
-			if (!request.getPathParameters().isEmpty()) {
-				request.getPathParameters()
-						.forEach((pName, pValue) -> request.getUrl().replaceAll("\\{" + pName + "\\}", pValue));
-			}
-
+			// generate request with
 			switch (request.getMethod()) {
 			case GET:
 				call = Unirest.get(request.getUrl());
@@ -71,27 +67,32 @@ public class SwagTest {
 				throw new RuntimeException("This HttpRequest is not supported.");
 			}
 
-			// apply query parameters
-			if (!request.getQueryParameters().isEmpty()) {
-				call.queryString(request.getQueryParameters());
+			// apply path parameters
+			if (!request.getPathParameters().isEmpty()) {
+				for (Entry<String, String> entry : request.getPathParameters().entrySet()) {
+					call = ((HttpRequest) call).routeParam(entry.getKey(), entry.getValue());
+				}
 			}
 
 			// apply header parameters
 			if (!request.getHeaderParameters().isEmpty()) {
-				call.headers(request.getHeaderParameters());
+				call = ((HttpRequest) call).headers(request.getHeaderParameters());
+			}
+
+			// apply query parameters
+			if (!request.getQueryParameters().isEmpty()) {
+				call = ((HttpRequest) call).queryString(request.getQueryParameters());
 			}
 
 			// apply body or form parameters
 			if (call instanceof HttpRequestWithBody) {
-				HttpRequestWithBody complexCall = (HttpRequestWithBody) call;
-
 				if (request.getBodyParameters() != null) {
-					if (!call.getHeaders().containsKey("Content-Type")) {
-						call.getHeaders().put("Content-Type", Collections.singletonList("application/json"));
+					if (!((HttpRequest) call).getHeaders().containsKey("Content-Type")) {
+						call = ((HttpRequest) call).header("Content-Type", "application/json");
 					}
-					complexCall.body(request.getBodyParameters().toString());
+					call = ((HttpRequestWithBody) call).body(request.getBodyParameters().toString());
 				} else if (!request.getFormDataParameters().isEmpty()) {
-					complexCall.fields(request.getFormDataParameters());
+					call = ((HttpRequestWithBody) call).fields(request.getFormDataParameters());
 				}
 			}
 
@@ -102,7 +103,6 @@ public class SwagTest {
 
 			response = new SwagResponse(input, elapsed);
 		}
-
 	}
 
 	/**

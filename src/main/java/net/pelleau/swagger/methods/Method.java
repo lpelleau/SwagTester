@@ -57,11 +57,15 @@ public abstract class Method {
 		}
 
 		// add http content-type header
-		if (operation.getConsumes() != null && !operation.getConsumes().isEmpty()) {
-			// TODO may ignore application/xml
-			// TODO may limit this to one entry
-			operation.getProduces().forEach(con -> request.getHeaderParameters().put("Content-Type", con));
-		}
+		// only one entry
+		// no application/xml
+		// if (operation.getConsumes() != null) {
+		// Optional<String> contentType = operation.getConsumes().stream()
+		// .filter(con -> !con.equals("application/xml")).findFirst();
+		// if (contentType.isPresent()) {
+		// request.getHeaderParameters().put("Content-Type", contentType.get());
+		// }
+		// }
 
 		// add endPoint to the url
 		request.setUrl(request.getUrl() + name);
@@ -103,7 +107,7 @@ public abstract class Method {
 
 			return testCase;
 		} catch (UnirestException e) {
-			throw new RuntimeException("Something went wrong calling the web API.");
+			throw new RuntimeException("Something went wrong calling the web API. : " + e.getMessage());
 		}
 	}
 

@@ -6,6 +6,9 @@ import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -14,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import net.pelleau.swagger.SwagTester;
+import net.pelleau.swagger.methods.Method;
 import net.pelleau.utils.SwagAssert;
 
 public class TestSwagTester {
@@ -77,6 +81,13 @@ public class TestSwagTester {
 	}
 
 	@Test
+	public void testSth() {
+		// swagger.entryPoint("/pet").postMethod().validTest(); // Simple object
+		SwagAssert.assertValid(swagger.entryPoint("/user/createWithArray").postMethod().validTest()); // Array
+		// object
+	}
+
+	@Test
 	public void testFull() {
 		swagger.entryPoints().forEach((name, entry) -> {
 			log.debug("Testing : " + entry.toString());
@@ -85,69 +96,34 @@ public class TestSwagTester {
 			for (int i = 0; i <= 1; i++) {
 
 				if (entry.getMethod() != null) {
-					SwagAssert.assertValid(entry.getMethod().validTest());
-					// SwagAssert.assertValid(entry.getMethod().invalidTest());
-					// SwagAssert.assertValid(entry.getMethod().scalingTest());
-					// SwagAssert.assertValid(entry.getMethod().extremValuesTest());
-					// SwagAssert.assertValid(entry.getMethod().timeoutTest(1000));
+					testMethod(entry.getMethod());
 				}
 
 				if (entry.headMethod() != null) {
-					SwagAssert.assertValid(entry.headMethod().validTest());
-					// SwagAssert.assertValid(entry.headMethod().invalidTest());
-					// SwagAssert.assertValid(entry.headMethod().scalingTest());
-					// SwagAssert.assertValid(entry.headMethod().extremValuesTest());
-					// SwagAssert.assertValid(entry.headMethod().timeoutTest(1000));
+					testMethod(entry.headMethod());
 				}
 
 				if (entry.postMethod() != null) {
-					SwagAssert.assertValid(entry.postMethod().validTest());
-					// SwagAssert.assertValid(entry.postMethod().invalidTest());
-					// SwagAssert.assertValid(entry.postMethod().scalingTest());
-					// SwagAssert.assertValid(entry.postMethod().extremValuesTest());
-					// SwagAssert.assertValid(entry.postMethod().timeoutTest(1000));
+					testMethod(entry.postMethod());
 				}
 
 				if (entry.putMethod() != null) {
-					SwagAssert.assertValid(entry.putMethod().validTest());
-					// SwagAssert.assertValid(entry.putMethod().invalidTest());
-					// SwagAssert.assertValid(entry.putMethod().scalingTest());
-					// SwagAssert.assertValid(entry.putMethod().extremValuesTest());
-					// SwagAssert.assertValid(entry.putMethod().timeoutTest(1000));
+					testMethod(entry.putMethod());
 				}
 
 				if (entry.patchMethod() != null) {
-					SwagAssert.assertValid(entry.patchMethod().validTest());
-					// SwagAssert.assertValid(entry.patchMethod().invalidTest());
-					// SwagAssert.assertValid(entry.patchMethod().scalingTest());
-					// SwagAssert.assertValid(entry.patchMethod().extremValuesTest());
-					// SwagAssert.assertValid(entry.patchMethod().timeoutTest(1000));
+					testMethod(entry.patchMethod());
 				}
 
 				if (entry.optionsMethod() != null) {
-					SwagAssert.assertValid(entry.optionsMethod().validTest());
-					// SwagAssert.assertValid(entry.optionsMethod().invalidTest());
-					// SwagAssert.assertValid(entry.optionsMethod().scalingTest());
-					// SwagAssert.assertValid(entry.optionsMethod().extremValuesTest());
-					// SwagAssert.assertValid(entry.optionsMethod().timeoutTest(1000));
+					testMethod(entry.optionsMethod());
 				}
 
 				if (entry.deleteMethod() != null) {
-					SwagAssert.assertValid(entry.deleteMethod().validTest());
-					// SwagAssert.assertValid(entry.deleteMethod().invalidTest());
-					// SwagAssert.assertValid(entry.deleteMethod().scalingTest());
-					// SwagAssert.assertValid(entry.deleteMethod().extremValuesTest());
-					// SwagAssert.assertValid(entry.deleteMethod().timeoutTest(1000));
+					testMethod(entry.deleteMethod());
 				}
 			}
 		});
-	}
-
-	@Test
-	public void testSth() {
-		// swagger.entryPoint("/pet").postMethod().validTest(); // Simple object
-		SwagAssert.assertValid(swagger.entryPoint("/user/createWithArray").postMethod().validTest()); // Array
-		// object
 	}
 
 	@Test
@@ -155,11 +131,7 @@ public class TestSwagTester {
 		swagger.entryPoints().forEach((name, entry) -> {
 			log.debug("Testing : " + entry.toString());
 			if (entry.getMethod() != null) {
-				SwagAssert.assertValid(entry.getMethod().validTest());
-				SwagAssert.assertValid(entry.getMethod().invalidTest());
-				SwagAssert.assertValid(entry.getMethod().extremValuesTest());
-				// SwagAssert.assertValid(entry.getMethod().scalingTest());
-				// SwagAssert.assertValid(entry.getMethod().timeoutTest(1000));
+				testMethod(entry.getMethod());
 			}
 		});
 	}
@@ -169,11 +141,7 @@ public class TestSwagTester {
 		swagger.entryPoints().forEach((name, entry) -> {
 			log.debug("Testing : " + entry.toString());
 			if (entry.postMethod() != null) {
-				SwagAssert.assertValid(entry.postMethod().validTest());
-				SwagAssert.assertValid(entry.postMethod().invalidTest());
-				SwagAssert.assertValid(entry.postMethod().extremValuesTest());
-				// SwagAssert.assertValid(entry.postMethod().scalingTest());
-				// SwagAssert.assertValid(entry.postMethod().timeoutTest(1000));
+				testMethod(entry.postMethod());
 			}
 		});
 	}
@@ -183,11 +151,7 @@ public class TestSwagTester {
 		swagger.entryPoints().forEach((name, entry) -> {
 			log.debug("Testing : " + entry.toString());
 			if (entry.putMethod() != null) {
-				SwagAssert.assertValid(entry.putMethod().validTest());
-				SwagAssert.assertValid(entry.putMethod().invalidTest());
-				SwagAssert.assertValid(entry.putMethod().extremValuesTest());
-				// SwagAssert.assertValid(entry.putMethod().scalingTest());
-				// SwagAssert.assertValid(entry.putMethod().timeoutTest(1000));
+				testMethod(entry.putMethod());
 			}
 		});
 	}
@@ -197,12 +161,45 @@ public class TestSwagTester {
 		swagger.entryPoints().forEach((name, entry) -> {
 			log.debug("Testing : " + entry.toString());
 			if (entry.deleteMethod() != null) {
-				SwagAssert.assertValid(entry.deleteMethod().validTest());
-				SwagAssert.assertValid(entry.deleteMethod().invalidTest());
-				SwagAssert.assertValid(entry.deleteMethod().extremValuesTest());
-				// SwagAssert.assertValid(entry.deleteMethod().scalingTest());
-				// SwagAssert.assertValid(entry.deleteMethod().timeoutTest(1000));
+				testMethod(entry.deleteMethod());
 			}
 		});
+	}
+
+	private void testMethod(Method method) {
+		testMethod(method, 1);
+	}
+
+	private void testMethod(Method method, int nbTest) {
+		for (int i = 0; i < nbTest; i++) {
+			executeTest(method);
+		}
+	}
+
+	private void testMethodWithThread(Method method) throws InterruptedException {
+		testMethodWithThread(method, 1);
+	}
+
+	private void testMethodWithThread(Method method, int nbTest) throws InterruptedException {
+		testMethodWithThread(method, nbTest, 8);
+	}
+
+	private void testMethodWithThread(Method method, int nbTest, int nbThread) throws InterruptedException {
+		ExecutorService threadPool = Executors.newFixedThreadPool(nbThread);
+		for (int i = 0; i < nbTest; i++) {
+			threadPool.submit(() -> {
+				executeTest(method);
+			});
+		}
+		threadPool.shutdown();
+		threadPool.awaitTermination(1, TimeUnit.HOURS);
+	}
+
+	private void executeTest(Method method) {
+		SwagAssert.assertValid(method.validTest());
+		SwagAssert.assertValid(method.invalidTest());
+		SwagAssert.assertValid(method.extremValuesTest());
+		// SwagAssert.assertValid(method.scalingTest());
+		// SwagAssert.assertValid(method.timeoutTest(1000));
 	}
 }

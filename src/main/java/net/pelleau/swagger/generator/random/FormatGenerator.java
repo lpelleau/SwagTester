@@ -8,11 +8,8 @@ public final class FormatGenerator {
 
 	}
 
-	public static Object getBoolean(RandomGenerator gen, String format) {
-		switch (format) {
-		default:
-			return gen.getBool();
-		}
+	public static Object getBoolean(RandomGenerator gen) {
+		return gen.getBool();
 	}
 
 	public static Object getInteger(RandomGenerator gen, String format, long minConstraint, long maxConstraint) {

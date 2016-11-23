@@ -96,7 +96,7 @@ public class SwagRequest {
 	@Override
 	public String toString() {
 		return "SwagRequest [url=" + url + ", method=" + method + ", testType=" + testType + ", headerParameters="
-				+ headerParameters + ", queryParameters=" + queryParameters + ", bodyParameters=" + bodyParameters
-				+ ", formDataParameters=" + formDataParameters + "]";
+				+ headerParameters + ", pathParameters=" + pathParameters + ", queryParameters=" + queryParameters
+				+ ", bodyParameters=" + bodyParameters + ", formDataParameters=" + formDataParameters + "]";
 	}
 }

@@ -37,7 +37,8 @@ public final class SwagAssert extends Assert {
 				fail();
 			} else {
 				log.debug("\tRESULT => \tFAIL");
-				log.warn("The test fails, but the Entrypoint is deprecated. Ignored.");
+				log.warn("The '" + test.getRequest().getTestType()
+						+ "' test fails, but the Entrypoint is deprecated. Ignored.");
 			}
 		}
 	}
