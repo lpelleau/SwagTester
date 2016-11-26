@@ -93,4 +93,8 @@ public class SwagTester {
 	public String getHost() {
 		return host;
 	}
+
+	public Swagger getSwagger() {
+		return swagger;
+	}
 }

@@ -1,6 +1,8 @@
 package swagger;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -47,12 +49,9 @@ public class TestSwagTester {
 	public void initialize() {
 		try {
 			File pathFile = new File(TestSwagTester.class.getClassLoader().getResource(file).getPath());
-
 			swagger = new SwagTester(pathFile.getAbsolutePath());
 		} catch (Exception e) {
-			e.printStackTrace();
 			fail(e.getMessage());
-
 		}
 	}
 
