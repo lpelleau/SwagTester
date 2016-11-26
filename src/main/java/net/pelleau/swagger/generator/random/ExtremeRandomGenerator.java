@@ -1,5 +1,6 @@
 package net.pelleau.swagger.generator.random;
 
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -71,5 +72,10 @@ final class ExtremeRandomGenerator implements RandomGenerator {
 		case 3:
 			return "2015-02-29T10:10:10.100Z";
 		}
+	}
+
+	@Override
+	public String getValue(List<String> enums) {
+		return enums.get(rng.nextInt(enums.size()));
 	}
 }

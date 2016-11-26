@@ -110,17 +110,30 @@ public final class BodyGenerator {
 		case "string":
 			if (property instanceof StringProperty) {
 				StringProperty stringProp = (StringProperty) property;
-				return FormatGenerator.getString(gen, stringProp.getFormat(),
-						(stringProp.getMinLength() != null ? stringProp.getMinLength() : 1),
-						(stringProp.getMaxLength() != null ? stringProp.getMaxLength() : 25));
+				if (stringProp.getEnum() != null && !stringProp.getEnum().isEmpty()) {
+					return gen.getValue(stringProp.getEnum());
+				} else {
+					return FormatGenerator.getString(gen, stringProp.getFormat(),
+							(stringProp.getMinLength() != null ? stringProp.getMinLength() : 1),
+							(stringProp.getMaxLength() != null ? stringProp.getMaxLength() : 25));
+				}
 			} else if (property instanceof DateTimeProperty) {
 				DateTimeProperty dateTimeProp = (DateTimeProperty) property;
-				return FormatGenerator.getString(gen, dateTimeProp.getFormat(), 0, 0);
+				if (dateTimeProp.getEnum() != null && !dateTimeProp.getEnum().isEmpty()) {
+					return gen.getValue(dateTimeProp.getEnum());
+				} else {
+					return FormatGenerator.getString(gen, dateTimeProp.getFormat(), 0, 0);
+				}
 			} else if (property instanceof DateProperty) {
 				DateProperty dateProp = (DateProperty) property;
-				return FormatGenerator.getString(gen, dateProp.getFormat(), 0, 0);
+				if (dateProp.getEnum() != null && !dateProp.getEnum().isEmpty()) {
+					return gen.getValue(dateProp.getEnum());
+				} else {
+					return FormatGenerator.getString(gen, dateProp.getFormat(), 0, 0);
+				}
 			} else {
-				throw new RuntimeException("This String format is not supported.");
+				throw new RuntimeException(
+						"This String format is not supported : " + property.getClass().getSimpleName());
 			}
 		case "integer":
 			BaseIntegerProperty intProp = (BaseIntegerProperty) property;

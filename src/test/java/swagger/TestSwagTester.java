@@ -1,8 +1,6 @@
 package swagger;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -25,7 +23,7 @@ public class TestSwagTester {
 	// @SuppressWarnings("unused")
 	private static Logger log = LoggerFactory.getLogger(TestSwagTester.class);
 
-	private static final String file = "petstore.json";
+	private static final String file = "petstore_modified.json";
 
 	private static final String crapFile = "petstore_crap.json";
 
@@ -52,7 +50,9 @@ public class TestSwagTester {
 
 			swagger = new SwagTester(pathFile.getAbsolutePath());
 		} catch (Exception e) {
+			e.printStackTrace();
 			fail(e.getMessage());
+
 		}
 	}
 

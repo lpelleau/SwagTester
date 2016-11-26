@@ -64,30 +64,35 @@ public final class ParameterGenerator {
 
 	private static Object getParameterValue(Swagger swagger, SerializableParameter param, TestType testType) {
 		RandomGenerator generator = RandomGeneratorFactory.getRandomGenerator(testType);
-		if (param.getRequired() || generator.getBool()) {
-			switch (param.getType()) {
-			case "string":
-				return FormatGenerator.getString(generator, param.getFormat(),
-						(param.getMinLength() != null ? param.getMinLength() : 1),
-						(param.getMaxLength() != null ? param.getMaxLength() : 25));
-			case "number":
-				return FormatGenerator.getNumber(generator, param.getFormat(),
-						(param.getMinLength() != null ? param.getMinLength() : Double.MIN_VALUE),
-						(param.getMaxLength() != null ? param.getMaxLength() : Double.MAX_VALUE));
-			case "integer":
-				return FormatGenerator.getInteger(generator, param.getFormat(),
-						(param.getMinLength() != null ? param.getMinLength() : Integer.MIN_VALUE),
-						(param.getMaxLength() != null ? param.getMaxLength() : Integer.MAX_VALUE));
-			case "boolean":
-				return FormatGenerator.getBoolean(generator);
-			case "array":
-				return getArray(swagger, generator, param,
-						(param.getMinItems() != null ? param.getMinItems() : (param.getRequired() ? 1 : 0)),
-						(param.getMaxItems() != null ? param.getMaxItems() : 10));
-			case "file":
-				return getFile();
-			default:
-				throw new RuntimeException("This type is not supported (" + param.getType() + ").");
+		if (param.getRequired() || generator.getBool() || generator.getBool()) {
+
+			if (param.getEnum() != null && !param.getEnum().isEmpty()) {
+				return generator.getValue(param.getEnum());
+			} else {
+				switch (param.getType()) {
+				case "string":
+					return FormatGenerator.getString(generator, param.getFormat(),
+							(param.getMinLength() != null ? param.getMinLength() : 1),
+							(param.getMaxLength() != null ? param.getMaxLength() : 25));
+				case "number":
+					return FormatGenerator.getNumber(generator, param.getFormat(),
+							(param.getMinimum() != null ? param.getMinimum() : Double.MIN_VALUE),
+							(param.getMaximum() != null ? param.getMaximum() : Double.MAX_VALUE));
+				case "integer":
+					return FormatGenerator.getInteger(generator, param.getFormat(),
+							(param.getMinimum() != null ? param.getMinimum().longValue() : Integer.MIN_VALUE),
+							(param.getMaximum() != null ? param.getMaximum().longValue() : Integer.MAX_VALUE));
+				case "boolean":
+					return FormatGenerator.getBoolean(generator);
+				case "array":
+					return getArray(swagger, generator, param,
+							(param.getMinItems() != null ? param.getMinItems() : (param.getRequired() ? 1 : 0)),
+							(param.getMaxItems() != null ? param.getMaxItems() : 10));
+				case "file":
+					return getFile();
+				default:
+					throw new RuntimeException("This type is not supported (" + param.getType() + ").");
+				}
 			}
 		} else {
 			return null;

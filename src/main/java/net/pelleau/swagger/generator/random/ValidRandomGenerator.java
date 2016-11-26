@@ -1,5 +1,6 @@
 package net.pelleau.swagger.generator.random;
 
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -38,11 +39,17 @@ final class ValidRandomGenerator implements RandomGenerator {
 
 	@Override
 	public String getDateTime() {
-		return getNumericString(4) + "-" + getNumericString(2) + "-" + getNumericString(2) + "T" + rng.nextInt(25) + ":"
-				+ rng.nextInt(61) + ":" + rng.nextInt(61) + "." + getNumericString(3) + "Z";
+		return getNumericString(4) + "-" + getNumericString(2) + "-" + getNumericString(2) + "T" + String.format("%02d", rng.nextInt(25)) + ":"
+				+ String.format("%02d", rng.nextInt(61)) + ":" + String.format("%02d", rng.nextInt(61)) + "." + getNumericString(3) + "Z";
 	}
 
 	private String getNumericString(int length) {
 		return RandomStringUtils.random(length, 0, 0, false, true, null, rng);
 	}
+
+	@Override
+	public String getValue(List<String> enums) {
+		return enums.get(rng.nextInt(enums.size()));
+	}
+
 }

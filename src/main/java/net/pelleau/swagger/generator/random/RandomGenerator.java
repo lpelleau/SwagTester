@@ -1,5 +1,7 @@
 package net.pelleau.swagger.generator.random;
 
+import java.util.List;
+
 public interface RandomGenerator {
 
 	/**
@@ -45,4 +47,11 @@ public interface RandomGenerator {
 	 *         "1970-01-01T00:00:00.001Z") format.
 	 */
 	String getDateTime();
+
+	/**
+	 * @param enums
+	 *            the possible values.
+	 * @return a value randomly picked form the enums.
+	 */
+	String getValue(List<String> enums);
 }

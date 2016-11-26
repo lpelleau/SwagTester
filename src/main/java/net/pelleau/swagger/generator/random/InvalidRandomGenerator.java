@@ -1,5 +1,6 @@
 package net.pelleau.swagger.generator.random;
 
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -23,7 +24,7 @@ final class InvalidRandomGenerator implements RandomGenerator {
 	@Override
 	public double getDouble(double min, double max) {
 		if (rng.nextBoolean()) {
-			return rng.nextDouble(Double.MIN_VALUE, min);
+			return rng.nextDouble(-Double.MAX_VALUE, min);
 		} else {
 			return rng.nextDouble(max, Double.MAX_VALUE);
 		}
@@ -50,11 +51,21 @@ final class InvalidRandomGenerator implements RandomGenerator {
 
 	@Override
 	public String getDateTime() {
-		return getNumericString(4) + "-" + getNumericString(2) + "-" + getNumericString(2) + "T" + rng.nextInt(25) + ":"
-				+ rng.nextInt(61) + ":" + rng.nextInt(61) + "." + getNumericString(3) + "Z";
+		return getNumericString(4) + "-" + getNumericString(2) + "-" + getNumericString(2) + "T"
+				+ String.format("%02d", rng.nextInt(25)) + ":" + String.format("%02d", rng.nextInt(61)) + ":"
+				+ String.format("%02d", rng.nextInt(61)) + "." + getNumericString(3) + "Z";
 	}
 
 	private String getNumericString(int length) {
 		return RandomStringUtils.random(length, 0, 0, false, true, null, rng);
+	}
+
+	@Override
+	public String getValue(List<String> enums) {
+		String curr;
+		do {
+			curr = RandomStringUtils.random(enums.get(0).length(), 0, 0, true, false, null, rng);
+		} while (enums.contains(curr));
+		return curr;
 	}
 }

@@ -1,5 +1,6 @@
 package net.pelleau.swagger.generator.random;
 
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -39,5 +40,10 @@ final class ScalingRandomGenerator implements RandomGenerator {
 	@Override
 	public String getDateTime() {
 		return "1990-01-01T00:00:00.001Z";
+	}
+
+	@Override
+	public String getValue(List<String> enums) {
+		return enums.get(0);
 	}
 }

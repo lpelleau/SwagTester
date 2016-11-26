@@ -13,6 +13,9 @@ public final class FormatGenerator {
 	}
 
 	public static Object getInteger(RandomGenerator gen, String format, long minConstraint, long maxConstraint) {
+		if (format == null) {
+			format = "int32";
+		}
 		switch (format) {
 		case "int32":
 		default:
@@ -23,6 +26,9 @@ public final class FormatGenerator {
 	}
 
 	public static Object getNumber(RandomGenerator gen, String format, double minConstraint, double maxConstraint) {
+		if (format == null) {
+			format = "float";
+		}
 		switch (format) {
 		case "float":
 		default:
