@@ -80,13 +80,6 @@ public class TestSwagTester {
 	}
 
 	@Test
-	public void testSth() {
-		// swagger.entryPoint("/pet").postMethod().validTest(); // Simple object
-		SwagAssert.assertValid(swagger.entryPoint("/user/createWithArray").postMethod().validTest()); // Array
-		// object
-	}
-
-	@Test
 	public void testFull() {
 		swagger.entryPoints().forEach((name, entry) -> {
 			log.debug("Testing : " + entry.toString());
