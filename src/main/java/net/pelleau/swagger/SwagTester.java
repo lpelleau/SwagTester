@@ -18,7 +18,9 @@ import io.swagger.models.HttpMethod;
 import io.swagger.models.Scheme;
 import io.swagger.models.Swagger;
 import io.swagger.parser.SwaggerParser;
+import net.pelleau.swagger.container.SwagRequest;
 import net.pelleau.swagger.container.SwagResponse;
+import net.pelleau.swagger.container.SwagTest;
 import net.pelleau.swagger.parser.ResultsParser;
 
 public class SwagTester {
@@ -86,9 +88,31 @@ public class SwagTester {
 
 				if (ep.getMethod(m) != null) {
 					ep.getMethod(m).getResults().forEach(res -> {
-						// TODO fill request
-						// TODO compare result with expected
-						// TODO add result tu List
+						SwagTest test = new SwagTest();
+						
+						SwagRequest r = new SwagRequest();
+						r.setUrl(getHost() + path);
+						r.setMethod(m);
+						res.getParameters().forEach(param -> {
+							if (param.getIn().equals("body")) {
+								r.setBodyParameters(param.getData());
+							}
+							// TODO fill header / query / path params
+						});
+						
+						test.setRequest(r);
+						
+						try {
+							test.execute();
+							
+							SwagResponse resp = test.getResponse();
+							if (resp.getBody().equals(res.getExpectedResult().toString())) {
+								resp.setStatusCode(5000);
+							}
+							result.add(resp);
+						} catch (UnirestException e) {
+							e.printStackTrace();
+						}
 					});
 				}
 

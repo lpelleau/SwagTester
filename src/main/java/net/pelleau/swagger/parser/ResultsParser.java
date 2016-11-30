@@ -13,8 +13,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.swagger.util.Json;
-import net.pelleau.swagger.parserv2.util.ClasspathHelper;
-import net.pelleau.swagger.parserv2.util.RemoteUrl;
 
 public class ResultsParser {
 	private Map<String, EntryPointResult> entryPoints;

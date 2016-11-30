@@ -53,6 +53,8 @@ public class TestResultsParser {
 	public void testFull() {
 		// parser.getEntryPoints().get("/pet").getMethod(HttpMethod.GET).getResults().get(0).getParameters().get(0).getData();
 
-		swagger.sendRequests();
+		swagger.sendRequests().forEach(r -> {
+			System.out.println(r.getStatusCode());
+		});
 	}
 }

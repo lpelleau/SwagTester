@@ -3,9 +3,9 @@ package net.pelleau.swagger.parser;
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class ParameterResult {
-	private JsonNode data;
+	protected JsonNode data;
 	private String in;
-	private JsonNode param;
+	protected JsonNode param;
 
 	public ParameterResult(JsonNode value) {
 		data = value;

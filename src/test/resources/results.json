@@ -7,24 +7,6 @@
 				],
 				"parameters": [
 					{
-						"in": "body",
-						"data": {
-							"sdflsfsd": "qsdqsd"
-						}
-					},
-					{
-						"in": "query",
-						"name": "machin",
-						"data": [
-							"available"
-						]
-					},
-					{
-						"in": "path",
-						"name": "petId",
-						"data": "2456"
-					},
-					{
 						"in": "formData",
 						"name": "name",
 						"data": ""
@@ -32,20 +14,6 @@
 				],
 				"expected": {
 					"sdflsfsd": "qsdqsd"
-				}
-			},
-			{
-				"produce": [
-					"application/json"
-				],
-				"parameters": [
-					{
-						"in": "body",
-						"data": {
-						}
-					}
-				],
-				"expected": {
 				}
 			}
 		]
