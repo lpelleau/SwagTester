@@ -12,7 +12,7 @@ public class HeaderParameterResult extends ParameterResult {
 
 	public String getName() {
 		if (name == null) {
-			name = data.get("name").toString();
+			name = data.get("name").textValue();
 		}
 
 		return name;
@@ -20,7 +20,7 @@ public class HeaderParameterResult extends ParameterResult {
 
 	public String getHeaderParameter() {
 		if (header == null) {
-			header = data.get("data").toString();
+			header = data.get("data").textValue();
 		}
 
 		return header;

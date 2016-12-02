@@ -64,6 +64,10 @@ public class SwagRequest {
 		return pathParameters;
 	}
 
+	public void setPathParameter(Map<String, String> pathParameters) {
+		this.pathParameters = pathParameters;
+	}
+
 	public Map<String, String> getHeaderParameters() {
 		if (headerParameters == null) {
 			headerParameters = new HashMap<String, String>();
@@ -71,11 +75,19 @@ public class SwagRequest {
 		return headerParameters;
 	}
 
+	public void setHeaderParameter(Map<String, String> headerParameters) {
+		this.headerParameters = headerParameters;
+	}
+
 	public Map<String, Object> getQueryParameters() {
 		if (queryParameters == null) {
 			queryParameters = new HashMap<String, Object>();
 		}
 		return queryParameters;
+	}
+
+	public void setQueryParameter(Map<String, Object> queryParameters) {
+		this.queryParameters = queryParameters;
 	}
 
 	public Map<String, Object> getFormDataParameters() {

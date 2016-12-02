@@ -38,7 +38,26 @@ public class Result {
 			ArrayNode params = ((ArrayNode) data.get("parameters"));
 
 			params.elements().forEachRemaining(p -> {
-				parameters.add(new ParameterResult(p));
+
+				ParameterResult param = null;
+
+				String in = p.findValue("in").textValue();
+
+				switch (in) {
+				case "query":
+					param = new QueryParameterResult(p);
+					break;
+				case "path":
+					param = new PathParameterResult(p);
+					break;
+				case "header":
+					param = new HeaderParameterResult(p);
+					break;
+				default:
+					param = new ParameterResult(p);
+				}
+
+				parameters.add(param);
 			});
 		}
 

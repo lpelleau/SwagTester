@@ -1,5 +1,5 @@
 {
-	"/pet": {
+	"/pet/{petId}": {
 		"get": [
 			{
 				"produce": [
@@ -7,13 +7,28 @@
 				],
 				"parameters": [
 					{
-						"in": "formData",
-						"name": "name",
-						"data": ""
+						"in": "path",
+						"name": "petId",
+						"data": "8739826599258079896"
 					}
 				],
 				"expected": {
-					"sdflsfsd": "qsdqsd"
+					"id": 8739826599258079896,
+					"category": {
+						"id": 0,
+						"name": "string"
+					},
+					"name": "doggie",
+					"photoUrls": [
+						"string"
+					],
+					"tags": [
+						{
+							"id": 0,
+							"name": "string"
+						}
+					],
+					"status": "available"
 				}
 			}
 		]

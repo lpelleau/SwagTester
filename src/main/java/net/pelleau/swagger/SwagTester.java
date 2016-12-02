@@ -21,6 +21,8 @@ import io.swagger.parser.SwaggerParser;
 import net.pelleau.swagger.container.SwagRequest;
 import net.pelleau.swagger.container.SwagResponse;
 import net.pelleau.swagger.container.SwagTest;
+import net.pelleau.swagger.parser.PathParameterResult;
+import net.pelleau.swagger.parser.QueryParameterResult;
 import net.pelleau.swagger.parser.ResultsParser;
 
 public class SwagTester {
@@ -89,22 +91,30 @@ public class SwagTester {
 				if (ep.getMethod(m) != null) {
 					ep.getMethod(m).getResults().forEach(res -> {
 						SwagTest test = new SwagTest();
-						
+
 						SwagRequest r = new SwagRequest();
 						r.setUrl(getHost() + path);
 						r.setMethod(m);
 						res.getParameters().forEach(param -> {
+
 							if (param.getIn().equals("body")) {
 								r.setBodyParameters(param.getData());
+
+							} else if (param.getIn().equals("query")) {
+								QueryParameterResult paramQuery = (QueryParameterResult) param;
+								r.setQueryParameter(paramQuery.getQueryParameter());
+
+							} else if (param.getIn().equals("path")) {
+								PathParameterResult paramPath = (PathParameterResult) param;
+								r.setPathParameter(paramPath.getPathParameter());
 							}
-							// TODO fill header / query / path params
 						});
-						
+
 						test.setRequest(r);
-						
+
 						try {
 							test.execute();
-							
+
 							SwagResponse resp = test.getResponse();
 							if (resp.getBody().equals(res.getExpectedResult().toString())) {
 								resp.setStatusCode(5000);

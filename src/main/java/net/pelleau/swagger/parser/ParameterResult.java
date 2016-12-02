@@ -13,7 +13,7 @@ public class ParameterResult {
 
 	public String getIn() {
 		if (in == null) {
-			in = data.get("in").toString();
+			in = data.get("in").textValue();
 		}
 
 		return in;
