@@ -81,8 +81,8 @@ public class SwagTester {
 		});
 	}
 
-	public List<SwagResponse> sendRequests() {
-		final List<SwagResponse> result = new ArrayList<>();
+	public List<SwagTest> sendRequests() {
+		final List<SwagTest> result = new ArrayList<>();
 
 		parser.getEntryPoints().forEach((path, ep) -> {
 
@@ -91,6 +91,7 @@ public class SwagTester {
 				if (ep.getMethod(m) != null) {
 					ep.getMethod(m).getResults().forEach(res -> {
 						SwagTest test = new SwagTest();
+						test.setExpectedBody(res.getExpectedResult());
 
 						SwagRequest r = new SwagRequest();
 						r.setUrl(getHost() + path);
@@ -116,10 +117,7 @@ public class SwagTester {
 							test.execute();
 
 							SwagResponse resp = test.getResponse();
-							if (resp.getBody().equals(res.getExpectedResult().toString())) {
-								resp.setStatusCode(5000);
-							}
-							result.add(resp);
+							result.add(test);
 						} catch (UnirestException e) {
 							e.printStackTrace();
 						}

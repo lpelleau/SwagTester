@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
@@ -26,6 +27,8 @@ public class SwagTest {
 	private SwagResponse response;
 
 	private List<SwagResponse> expectedValues;
+
+	private JsonNode expectedBody;
 
 	public SwagTest() {
 
@@ -119,26 +122,34 @@ public class SwagTest {
 			return false;
 		}
 
-		for (SwagResponse current : expectedValues) {
-			boolean valid = current.getStatusCode() == response.getStatusCode();
+		boolean valid = true;
 
-			if (valid && current.getStatusText() != null) {
-				valid &= current.getStatusText().equals(response.getStatusText());
-			}
+		if (expectedValues != null) {
+			for (SwagResponse current : expectedValues) {
+				valid = current.getStatusCode() == response.getStatusCode();
 
-			if (valid && current.getHeader() != null) {
-				valid &= current.getHeader().equals(response.getHeader());
-			}
+				if (valid && current.getStatusText() != null) {
+					valid &= current.getStatusText().equals(response.getStatusText());
+				}
 
-			if (valid && current.getBody() != null) {
-				// TODO try to have a regex or a matching tool to have joker
-				// char in case we can't predict the answer
-				valid &= current.getBody().equals(response.getBody());
-			}
+				if (valid && current.getHeader() != null) {
+					valid &= current.getHeader().equals(response.getHeader());
+				}
 
-			if (valid) {
-				return valid;
+				if (valid && current.getBody() != null) {
+					// TODO try to have a regex or a matching tool to have joker
+					// char in case we can't predict the answer
+					valid &= current.getBody().equals(response.getBody());
+				}
 			}
+		}
+
+		if (getExpectedBody() != null) {
+			valid &= response.getBody().equals(getExpectedBody().toString());
+		}
+
+		if (valid) {
+			return valid;
 		}
 
 		if (request.isDeprecated()) {
@@ -171,6 +182,14 @@ public class SwagTest {
 
 	public SwagRequest getRequest() {
 		return request;
+	}
+
+	public void setExpectedBody(JsonNode value) {
+		expectedBody = value;
+	}
+
+	public JsonNode getExpectedBody() {
+		return expectedBody;
 	}
 
 	@Override
