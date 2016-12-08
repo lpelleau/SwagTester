@@ -6,6 +6,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,9 +21,11 @@ import io.swagger.models.HttpMethod;
 import io.swagger.models.Scheme;
 import io.swagger.models.Swagger;
 import io.swagger.parser.SwaggerParser;
+import net.pelleau.swagger.container.SwagMetrics;
 import net.pelleau.swagger.container.SwagRequest;
 import net.pelleau.swagger.container.SwagResponse;
 import net.pelleau.swagger.container.SwagTest;
+import net.pelleau.swagger.methods.Method;
 import net.pelleau.swagger.parser.PathParameterResult;
 import net.pelleau.swagger.parser.QueryParameterResult;
 import net.pelleau.swagger.parser.ResultsParser;
@@ -28,6 +33,8 @@ import net.pelleau.swagger.parser.ResultsParser;
 public class SwagTester {
 
 	private static Logger log = LoggerFactory.getLogger(SwagTester.class);
+
+	private static final int NB_THREADS = 32;
 
 	private Swagger swagger;
 	private ResultsParser parser;
@@ -176,5 +183,70 @@ public class SwagTester {
 
 	public Swagger getSwagger() {
 		return swagger;
+	}
+
+	public SwagMetrics runTests() {
+		return runTests(1);
+	}
+
+	public SwagMetrics runTests(int nbTests) {
+		SwagMetrics sm = new SwagMetrics();
+		testFull(sm, nbTests);
+		return sm;
+	}
+
+	private void testFull(SwagMetrics metrics, int nbTests) {
+		entryPoints().forEach((name, entry) -> {
+			if (entry.getMethod() != null) {
+				testMethod(entry.getMethod(), metrics, nbTests, NB_THREADS);
+			}
+
+			if (entry.headMethod() != null) {
+				testMethod(entry.headMethod(), metrics, nbTests, NB_THREADS);
+			}
+
+			if (entry.postMethod() != null) {
+				testMethod(entry.postMethod(), metrics, nbTests, NB_THREADS);
+			}
+
+			if (entry.putMethod() != null) {
+				testMethod(entry.putMethod(), metrics, nbTests, NB_THREADS);
+			}
+
+			if (entry.patchMethod() != null) {
+				testMethod(entry.patchMethod(), metrics, nbTests, NB_THREADS);
+			}
+
+			if (entry.optionsMethod() != null) {
+				testMethod(entry.optionsMethod(), metrics, nbTests, NB_THREADS);
+			}
+
+			if (entry.deleteMethod() != null) {
+				testMethod(entry.deleteMethod(), metrics, nbTests, NB_THREADS);
+			}
+		});
+	}
+
+	private void testMethod(Method method, SwagMetrics metrics, int nbTest, int nbThread) {
+		ExecutorService threadPool = Executors.newFixedThreadPool(nbThread);
+		for (int i = 0; i < nbTest; i++) {
+			threadPool.submit(() -> {
+				executeTest(method, metrics);
+			});
+		}
+		threadPool.shutdown();
+		try {
+			threadPool.awaitTermination(1, TimeUnit.HOURS);
+		} catch (InterruptedException e) {
+			log.error(e.getMessage());
+		}
+	}
+
+	private void executeTest(Method method, SwagMetrics metrics) {
+		metrics.addResult(method.validTest());
+		metrics.addResult(method.invalidTest());
+		metrics.addResult(method.extremValuesTest());
+		// SwagAssert.assertValid(method.scalingTest());
+		// SwagAssert.assertValid(method.timeoutTest(1000));
 	}
 }
