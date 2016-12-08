@@ -14,10 +14,23 @@ public final class SwagAssert extends Assert {
 	private SwagAssert() {
 	}
 
+	/**
+	 * Same as assertValid(test, false);
+	 */
 	public static void assertValid(SwagTest test) {
 		assertValid(test, false);
 	}
 
+	/**
+	 * Assert that the response in the SwagTest corresponds to one of the
+	 * expected responses.
+	 * 
+	 * @param test
+	 *            The test case.
+	 * @param strictWithDeprecated
+	 *            Indicates if this assert must fail when it encounter a
+	 *            runtimeException mostly when using a deprecated method.
+	 */
 	public static void assertValid(SwagTest test, boolean strictWithDeprecated) {
 		log.debug("\tTYPE => \t" + test.getRequest().getTestType());
 		log.debug("\tREQUEST => \t" + test.getRequest().toString());
