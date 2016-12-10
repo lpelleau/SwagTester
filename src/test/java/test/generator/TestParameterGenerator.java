@@ -20,7 +20,7 @@ import net.pelleau.swagger.SwagTester;
 import net.pelleau.swagger.container.SwagRequest;
 import net.pelleau.swagger.generator.ParameterGenerator;
 import net.pelleau.swagger.methods.TestType;
-import swagger.TestSwagTester;
+import test.swagger.TestSwagTester;
 
 public class TestParameterGenerator {
 

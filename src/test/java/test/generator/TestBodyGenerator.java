@@ -17,7 +17,7 @@ import io.swagger.models.properties.StringProperty;
 import net.pelleau.swagger.SwagTester;
 import net.pelleau.swagger.generator.BodyGenerator;
 import net.pelleau.swagger.methods.TestType;
-import swagger.TestSwagTester;
+import test.swagger.TestSwagTester;
 
 public class TestBodyGenerator {
 

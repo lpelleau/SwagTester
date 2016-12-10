@@ -1,4 +1,4 @@
-package swagger;
+package test.swagger;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -17,7 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import net.pelleau.swagger.SwagTester;
-import net.pelleau.swagger.container.SwagMetrics;
 import net.pelleau.swagger.methods.Method;
 import net.pelleau.utils.SwagAssert;
 
