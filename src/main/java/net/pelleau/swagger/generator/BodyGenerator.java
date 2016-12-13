@@ -72,7 +72,7 @@ public final class BodyGenerator {
 			return fillType(swagger, gen, refT);
 		} else {
 			// return null;
-			throw new RuntimeException("Can't found this reference.");
+			throw new RuntimeException("Can't found this reference : " + property.get$ref());
 		}
 	}
 
