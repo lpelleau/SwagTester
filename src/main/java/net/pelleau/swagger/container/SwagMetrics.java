@@ -13,6 +13,10 @@ public class SwagMetrics {
 	public static class Stat {
 		public int nbValids;
 		public int nbTotals;
+
+		public String toString() {
+			return nbValids + " / " + nbTotals;
+		}
 	}
 
 	private List<SwagTest> results;
@@ -72,14 +76,26 @@ public class SwagMetrics {
 	 * @return A list containing only the successful tests.
 	 */
 	public List<SwagTest> getSuccessfulTests() {
-		return results.stream().filter(t -> t.isValid()).collect(Collectors.toList());
+		return results.stream().filter(t -> {
+			try {
+				return t.isValid();
+			} catch (RuntimeException e) {
+				return false;
+			}
+		}).collect(Collectors.toList());
 	}
 
 	/**
 	 * @return A list containing only the failed tests.
 	 */
 	public List<SwagTest> getFailedTests() {
-		return results.stream().filter(t -> !t.isValid()).collect(Collectors.toList());
+		return results.stream().filter(t -> {
+			try {
+				return !t.isValid();
+			} catch (RuntimeException e) {
+				return true;
+			}
+		}).collect(Collectors.toList());
 	}
 
 	/**

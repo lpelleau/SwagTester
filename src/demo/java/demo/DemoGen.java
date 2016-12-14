@@ -14,6 +14,10 @@ public class DemoGen {
 
 	private static final String fileName = "petstore_simple.json";
 
+	/**
+	 * Permet de voir les possibilités des générateurs aléatoires et de voir la
+	 * prise en compte des valeurs du fichier json.
+	 */
 	@Test
 	public void possibilitiesOfRandomGenerator() throws FileNotFoundException {
 		File pathFile = new File(TestSwagTester.class.getClassLoader().getResource(fileName).getPath());
