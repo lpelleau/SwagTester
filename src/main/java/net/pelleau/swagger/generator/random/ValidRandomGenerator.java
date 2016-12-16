@@ -34,13 +34,15 @@ final class ValidRandomGenerator implements RandomGenerator {
 
 	@Override
 	public String getDate() {
-		return getNumericString(4) + "-" + getNumericString(2) + "-" + getNumericString(2);
+		return getNumericString(4) + "-" + String.format("%02d", 1 + rng.nextInt(12)) + "-"
+				+ String.format("%02d", 1 + rng.nextInt(31));
 	}
 
 	@Override
 	public String getDateTime() {
-		return getNumericString(4) + "-" + getNumericString(2) + "-" + getNumericString(2) + "T" + String.format("%02d", rng.nextInt(25)) + ":"
-				+ String.format("%02d", rng.nextInt(61)) + ":" + String.format("%02d", rng.nextInt(61)) + "." + getNumericString(3) + "Z";
+		return getNumericString(4) + "-" + getNumericString(2) + "-" + getNumericString(2) + "T"
+				+ String.format("%02d", rng.nextInt(25)) + ":" + String.format("%02d", rng.nextInt(61)) + ":"
+				+ String.format("%02d", rng.nextInt(61)) + "." + getNumericString(3) + "Z";
 	}
 
 	private String getNumericString(int length) {

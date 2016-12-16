@@ -15,7 +15,7 @@ public class DemoSimple {
 	private static final String fileName = "petstore_simple.json";
 
 	/**
-	 * Montre le process général pour un cas concret
+	 * Montre le process gï¿½nï¿½ral pour un cas concret
 	 */
 	@Test
 	public void simpleDemo() throws FileNotFoundException {
@@ -40,6 +40,7 @@ public class DemoSimple {
 			System.out.println(vTest.getRequest());
 			System.out.println(vTest.getExpectedValues());
 			System.out.println(vTest.getResponse());
+			System.out.println(vTest.isValid());
 
 			System.out.println();
 
@@ -49,6 +50,7 @@ public class DemoSimple {
 			System.out.println(iTest.getRequest());
 			System.out.println(iTest.getExpectedValues());
 			System.out.println(iTest.getResponse());
+			System.out.println(iTest.isValid());
 
 		} else {
 			System.out.println("SERVER OFFLINE");

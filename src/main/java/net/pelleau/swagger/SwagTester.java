@@ -196,44 +196,38 @@ public class SwagTester {
 	}
 
 	private void testFull(SwagMetrics metrics, int nbTests) {
+		ExecutorService threadPool = Executors.newFixedThreadPool(NB_THREADS);
+
 		entryPoints().forEach((name, entry) -> {
 			if (entry.getMethod() != null) {
-				testMethod(entry.getMethod(), metrics, nbTests, NB_THREADS);
+				testMethod(entry.getMethod(), metrics, nbTests, threadPool);
 			}
 
 			if (entry.headMethod() != null) {
-				testMethod(entry.headMethod(), metrics, nbTests, NB_THREADS);
+				testMethod(entry.headMethod(), metrics, nbTests, threadPool);
 			}
 
 			if (entry.postMethod() != null) {
-				testMethod(entry.postMethod(), metrics, nbTests, NB_THREADS);
+				testMethod(entry.postMethod(), metrics, nbTests, threadPool);
 			}
 
 			if (entry.putMethod() != null) {
-				testMethod(entry.putMethod(), metrics, nbTests, NB_THREADS);
+				testMethod(entry.putMethod(), metrics, nbTests, threadPool);
 			}
 
 			if (entry.patchMethod() != null) {
-				testMethod(entry.patchMethod(), metrics, nbTests, NB_THREADS);
+				testMethod(entry.patchMethod(), metrics, nbTests, threadPool);
 			}
 
 			if (entry.optionsMethod() != null) {
-				testMethod(entry.optionsMethod(), metrics, nbTests, NB_THREADS);
+				testMethod(entry.optionsMethod(), metrics, nbTests, threadPool);
 			}
 
 			if (entry.deleteMethod() != null) {
-				testMethod(entry.deleteMethod(), metrics, nbTests, NB_THREADS);
+				testMethod(entry.deleteMethod(), metrics, nbTests, threadPool);
 			}
 		});
-	}
 
-	private void testMethod(Method method, SwagMetrics metrics, int nbTest, int nbThread) {
-		ExecutorService threadPool = Executors.newFixedThreadPool(nbThread);
-		for (int i = 0; i < nbTest; i++) {
-			threadPool.submit(() -> {
-				executeTest(method, metrics);
-			});
-		}
 		threadPool.shutdown();
 		try {
 			threadPool.awaitTermination(1, TimeUnit.HOURS);
@@ -242,11 +236,19 @@ public class SwagTester {
 		}
 	}
 
+	private void testMethod(Method method, SwagMetrics metrics, int nbTest, ExecutorService threadPool) {
+		for (int i = 0; i < nbTest; i++) {
+			threadPool.submit(() -> {
+				executeTest(method, metrics);
+			});
+		}
+	}
+
 	private void executeTest(Method method, SwagMetrics metrics) {
 		metrics.addResult(method.validTest());
 		metrics.addResult(method.invalidTest());
 		metrics.addResult(method.extremValuesTest());
-		// SwagAssert.assertValid(method.scalingTest());
+		// metrics.addResult(method.scalingTest());
 		// SwagAssert.assertValid(method.timeoutTest(1000));
 	}
 }
