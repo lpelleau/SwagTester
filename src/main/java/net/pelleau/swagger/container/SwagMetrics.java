@@ -15,7 +15,7 @@ public class SwagMetrics {
 		public int nbTotals;
 
 		public String toString() {
-			return nbValids + " / " + nbTotals;
+			return nbValids + " / " + nbTotals + (nbTotals != 0 ? " (" + ((nbValids * 100) / nbTotals) + "%)" : "");
 		}
 	}
 
@@ -47,8 +47,13 @@ public class SwagMetrics {
 
 		Stat s = stats.get(result.getRequest().getTestType());
 		s.nbTotals++;
-		if (result.isValid()) {
-			s.nbValids++;
+
+		try {
+			if (result.isValid()) {
+				s.nbValids++;
+			}
+		} catch (RuntimeException e) {
+			// fail but deprecated test
 		}
 	}
 

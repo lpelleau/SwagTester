@@ -23,7 +23,6 @@ import io.swagger.models.Swagger;
 import io.swagger.parser.SwaggerParser;
 import net.pelleau.swagger.container.SwagMetrics;
 import net.pelleau.swagger.container.SwagRequest;
-import net.pelleau.swagger.container.SwagResponse;
 import net.pelleau.swagger.container.SwagTest;
 import net.pelleau.swagger.methods.Method;
 import net.pelleau.swagger.parser.PathParameterResult;
@@ -123,7 +122,8 @@ public class SwagTester {
 						try {
 							test.execute();
 
-							SwagResponse resp = test.getResponse();
+							// SwagResponse resp = test.getResponse();
+
 							result.add(test);
 						} catch (UnirestException e) {
 							e.printStackTrace();
@@ -229,6 +229,7 @@ public class SwagTester {
 		});
 
 		threadPool.shutdown();
+
 		try {
 			threadPool.awaitTermination(1, TimeUnit.HOURS);
 		} catch (InterruptedException e) {
@@ -238,7 +239,7 @@ public class SwagTester {
 
 	private void testMethod(Method method, SwagMetrics metrics, int nbTest, ExecutorService threadPool) {
 		for (int i = 0; i < nbTest; i++) {
-			threadPool.submit(() -> {
+			threadPool.execute(() -> {
 				executeTest(method, metrics);
 			});
 		}

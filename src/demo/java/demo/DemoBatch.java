@@ -28,19 +28,19 @@ public class DemoBatch {
 
 			SwagMetrics metrics = swagger.runTests(10);
 
-			System.out.println("NB TESTS : " + metrics.getResults().size());
-			System.out.println("NB SUCCESSFUL : " + metrics.getSuccessfulTests().size());
-			System.out.println("NB FAILED : " + metrics.getFailedTests().size());
+			System.out.print("TOTAL : " + metrics.getSuccessfulTests().size() + " / " + metrics.getResults().size());
+			System.out
+					.println(" (" + ((metrics.getSuccessfulTests().size() * 100) / metrics.getResults().size()) + "%)");
+
+			metrics.getStats().forEach((type, stat) -> {
+				System.out.println(type + " : " + stat);
+			});
+
 			System.out.println();
 
 			System.out.println("MINIMUM : " + metrics.getMinExecTime());
 			System.out.println("MAXIMUM : " + metrics.getMaxExecTime());
 			System.out.println("AVERAGE : " + metrics.getAvgExecTime());
-			System.out.println();
-
-			metrics.getStats().forEach((type, stat) -> {
-				System.out.println(type + " : " + stat);
-			});
 
 		} else {
 			System.out.println("SERVER OFFLINE");
