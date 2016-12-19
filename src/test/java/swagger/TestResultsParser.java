@@ -5,23 +5,20 @@ import static org.junit.Assert.fail;
 import java.io.File;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import net.pelleau.swagger.SwagTester;
-import net.pelleau.swagger.parser.ResultsParser;
 
 public class TestResultsParser {
+	@SuppressWarnings("unused")
 	private static Logger log = LoggerFactory.getLogger(TestResultsParser.class);
 
 	private static final String file = "petstore_modified.json";
 	private static final String resultsFile = "results.json";
 
 	private SwagTester swagger;
-
-	private ResultsParser parser;
 
 	@Before
 	public void initialize() {
@@ -30,7 +27,6 @@ public class TestResultsParser {
 			File pathFileRes = new File(TestResultsParser.class.getClassLoader().getResource(resultsFile).getPath());
 
 			swagger = new SwagTester(pathFile.getAbsolutePath(), pathFileRes.getAbsolutePath());
-			parser = new ResultsParser(pathFileRes.getAbsolutePath());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());

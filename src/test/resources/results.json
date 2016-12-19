@@ -9,16 +9,46 @@
 					{
 						"in": "path",
 						"name": "petId",
-						"data": "8739826599258079896"
+						"data": "5435435435454"
 					}
 				],
 				"expected": {
-					"id": 8739826599258079896,
+					"id": 5435435435454,
 					"category": {
 						"id": 0,
 						"name": "string"
 					},
-					"name": "doggie",
+					"name": "Pes",
+					"photoUrls": [
+						"string"
+					],
+					"tags": [
+						{
+							"id": 0,
+							"name": "string"
+						}
+					],
+					"status": "available"
+				}
+			}, 
+			{
+				"produce": [
+					"application/json"
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "petId",
+						"data": "5435435435454"
+					}
+				],
+				"expected": {
+					"id": 5435435435455,
+					"category": {
+						"id": 0,
+						"name": "string"
+					},
+					"name": "Pes",
 					"photoUrls": [
 						"string"
 					],
