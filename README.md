@@ -13,6 +13,95 @@ This project took place in a Software Testing course. The goal of this project i
 4. Import the *.jar* file in your project
 
 ## Usage exemples
+**Simple case scenario for the library**
+```Java
+		File pathFile = new File(pathToFile);
+
+		SwagTester swagger = new SwagTester(pathFile.getAbsolutePath());
+
+		if (swagger.isServerUp()) {
+			System.out.println("SERVER ONLINE");
+
+			swagger.entryPoints().forEach((name, ep) -> {
+				System.out.println(name);
+				System.out.println("\t" + ep);
+				System.out.println();
+			});
+
+			EntryPoint pet = swagger.entryPoint("/pet");
+
+			SwagTest vTest = pet.putMethod().validTest();
+
+			System.out.println("VALID TEST");
+			System.out.println(vTest.getRequest());
+			System.out.println(vTest.getExpectedValues());
+			System.out.println(vTest.getResponse());
+			System.out.println(vTest.isValid());
+
+			System.out.println();
+
+			SwagTest iTest = pet.putMethod().invalidTest();
+
+			System.out.println("INVALID TEST");
+			System.out.println(iTest.getRequest());
+			System.out.println(iTest.getExpectedValues());
+			System.out.println(iTest.getResponse());
+			System.out.println(iTest.isValid());
+
+		} else {
+			System.out.println("SERVER OFFLINE");
+		}
+```
+
+**The exemple above send 10 requests to each entry points**
+```Java
+		File pathFile = new File(pathToFile);
+
+		SwagTester swagger = new SwagTester(pathFile.getAbsolutePath());
+
+		if (swagger.isServerUp()) {
+			System.out.println("SERVER ONLINE");
+
+			SwagMetrics metrics = swagger.runTests(10);
+
+			System.out.print("TOTAL : " + metrics.getSuccessfulTests().size() + " / " + metrics.getResults().size());
+			System.out
+					.println(" (" + ((metrics.getSuccessfulTests().size() * 100) / metrics.getResults().size()) + "%)");
+
+			metrics.getStats().forEach((type, stat) -> {
+				System.out.println(type + " : " + stat);
+			});
+
+			System.out.println();
+
+			System.out.println("MINIMUM : " + metrics.getMinExecTime());
+			System.out.println("MAXIMUM : " + metrics.getMaxExecTime());
+			System.out.println("AVERAGE : " + metrics.getAvgExecTime());
+
+		} else {
+			System.out.println("SERVER OFFLINE");
+		}
+```
+
+**The exemple above send requests to the requests present in the `pathToFileExpected` file and compare with the expected result**
+```Java
+		File pathFile = new File(pathToFile);
+		File pathFileExpected = new File(pathToFileExpected);
+
+		SwagTester swagger = new SwagTester(pathFile.getAbsolutePath(), pathFileExpected.getAbsolutePath());
+
+		if (swagger.isServerUp()) {
+			System.out.println("SERVER ONLINE");
+
+			swagger.sendRequests().forEach(test -> {
+				System.out.print(test.getRequest().getUrl() + " : ");
+				System.out.println(test.isValid() ? "AS EXPECTED" : "NOT AS EXPECTED");
+			});
+
+		} else {
+			System.out.println("SERVER OFFLINE");
+		}
+```
 
 ## Documentation
 ### Summary
@@ -54,6 +143,7 @@ For exemple, if the type of the data is integer, we will try *0*, *2^32-1* (nega
 * Improve the expected file parsing (to cover more types)
 * Timeout test
 * Scalling test
+* Authentification to the API
 
 This software is under MIT license.
 Also, feel free to **contribute** or discuss with us about possible improvements!
