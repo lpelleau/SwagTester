@@ -1,9 +1,9 @@
 # SwagTester
 ## Synopsis
-SwagTester is a **fuzzing** library allowing you to test an API Rest based on **[Swagger](http://swagger.io/)** specification. SwagTester allow you to send random requests either valid (specification of the API respected) or invalid (wrong types, number of elements...). You can also write a Json file with tour tests and get metricsof the results.
+SwagTester is a **fuzzing** library allowing you to test a Rest API based on **[Swagger](http://swagger.io/)** specification. SwagTester allow you to send random requests either valid (specification of the API respected) or invalid (wrong types, number of elements...). You can also write a Json file with your tests and get metrics of the results.
 
 ## Motivation
-This project took place in a Software Testing course. The goal of this project is to create a fuzzing library which can test an API Rest specified with a Swagger file.
+This project took place in a Software Testing course. The goal of this project is to create a fuzzing library which can test a Rest API specified with a Swagger file.
 
 ## Installation
 1. Clone the repository on your computer:
@@ -110,8 +110,8 @@ This project took place in a Software Testing course. The goal of this project i
     2.1. [Valid test](#valid-test)
     2.2. [Invalid test](#invalid-test)
     2.3. [Extrem values test](#extrem-test)
-    2.4. [Timeout test](#timeout-test)
-    2.5. [Scalling test](#scalling-test)
+    2.4. [Scalling test](#scalling-test)
+    2.5. [Timeout test](#timeout-test)
 
 ### Content
 #### 1. HTTP Methods allowed
@@ -131,11 +131,12 @@ The values generated will be impossible values: they will of a different type or
 Fill the values with data at the extremums of the specifications.
 For exemple, if the type of the data is integer, we will try *0*, *2^32-1* (negative) and *2^31-1* (positive).
 
-##### 2.4. Timeout test
+##### 2.4. Scalling test
+A scalling test will generate data following the specifications (like a valid test) but try to be as quick as possible. There is 
+
+##### 2.5. Timeout test
 *NOT IMPLEMENTED*
 
-##### 2.5. Scalling test
-*NOT IMPLEMENTED*
 
 ## Todo & Contribute
 * Handle XML (only Json is accepted for now)
