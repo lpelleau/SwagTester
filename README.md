@@ -132,7 +132,10 @@ Fill the values with data at the extremums of the specifications.
 For exemple, if the type of the data is integer, we will try *0*, *2^32-1* (negative) and *2^31-1* (positive).
 
 ##### 2.4. Scalling test
-A scalling test will generate data following the specifications (like a valid test) but try to be as quick as possible. There is 
+This type of test should be use with a batch test with threads.
+Its aim is to focus on the response time and not on the generated values.
+A scalling test will generate data following the specifications (like a valid test) but try to be as quick as possible. 
+There is almost no random. For exemple, if you want an integer between 10 and 20, it will always return 10.
 
 ##### 2.5. Timeout test
 *NOT IMPLEMENTED*
@@ -143,7 +146,6 @@ A scalling test will generate data following the specifications (like a valid te
 * Improve the strenght with types
 * Improve the expected file parsing (to cover more types)
 * Timeout test
-* Scalling test
 * Authentification to the API
 
 This software is under MIT license.
