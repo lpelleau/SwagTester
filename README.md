@@ -8,9 +8,32 @@ This project took place in a Software Testing course. The goal of this project i
 ## Installation
 1. Clone the repository on your computer:
 `git clone https://github.com/lpelleau/SwagTester.git && cd SwagTester`
-2. compile the project to create the *.jar* file with `./gradlew <INCOMPÉTENCE DE REUZEAU>`
-3. !!! Voir si les dépendences sont dans le .jar !!!
-4. Import the *.jar* file in your project
+2. Compile the project in Eclipse to create the *.jar* file
+3. Import the *.jar* file to your project
+4. Add following dependencies in your project (gradle below):
+```Gradle
+dependencies {
+	// swagger
+	compile group: 'io.swagger', name: 'swagger-parser', version: '1.0.+'
+	
+	// unirest
+	compile group : 'com.mashape.unirest', name: 'unirest-java', version: '1.4.9'	
+	compile group : 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.2'
+	compile group : 'org.apache.httpcomponents', name: 'httpasyncclient', version: '4.1.2'	
+	compile group : 'org.apache.httpcomponents', name: 'httpmime', version: '4.5.2'	
+	compile group : 'org.json', name: 'json', version: '1.5-20090211'
+	
+	// apache commons-lang (random string)
+	compile group: 'commons-lang', name: 'commons-lang', version: '2.6'
+	
+	// log
+	compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.21'
+	compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.21'
+	
+	// junit
+	testCompile group: 'junit', name: 'junit', version: '4.+'
+}
+```
 
 ## Usage exemples
 **Simple case scenario for the library**
