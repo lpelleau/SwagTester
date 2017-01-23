@@ -83,7 +83,7 @@ This project took place in a Software Testing course. The goal of this project i
 		}
 ```
 
-**The exemple above send requests to the requests present in the `pathToFileExpected` file and compare with the expected result**
+**The exemple above send requests to the requests present in the `pathToFileExpected` file and compare with the expected result. You can find a sample [here](https://github.com/lpelleau/SwagTester/blob/master/src/test/resources/results.json)**
 ```Java
 		File pathFile = new File(pathToFile);
 		File pathFileExpected = new File(pathToFileExpected);
@@ -104,14 +104,6 @@ This project took place in a Software Testing course. The goal of this project i
 ```
 
 ## Documentation
-### Summary
-1. [HTTP Methods allowed](#http-methods-allowed)
-2. [Test types](#test-types)
-    2.1. [Valid test](#valid-test)
-    2.2. [Invalid test](#invalid-test)
-    2.3. [Extrem values test](#extrem-test)
-    2.4. [Scalling test](#scalling-test)
-    2.5. [Timeout test](#timeout-test)
 
 ### Content
 #### 1. HTTP Methods allowed
@@ -137,15 +129,12 @@ Its aim is to focus on the response time and not on the generated values.
 A scalling test will generate data following the specifications (like a valid test) but try to be as quick as possible. 
 There is almost no random. For exemple, if you want an integer between 10 and 20, it will always return 10.
 
-##### 2.5. Timeout test
-*NOT IMPLEMENTED*
-
 
 ## Todo & Contribute
-* Handle XML (only Json is accepted for now)
+* Handle XML payloads for HTTP (only Json is accepted for now)
 * Improve the strenght with types
 * Improve the expected file parsing (to cover more types)
-* Timeout test
+* Handle YAML Parser for Swagger Specs
 * Authentification to the API
 
 This software is under MIT license.
