@@ -1,4 +1,54 @@
 {
+	"/pet": {
+		"post": [
+			{
+				"produce": [
+					"application/json"
+				],
+				"parameters": [
+					{
+						"in": "body",
+						"data": {
+							"id": 5435435435454,
+							"category": {
+								"id": 0,
+								"name": "string"
+							},
+							"name": "Pes",
+							"photoUrls": [
+								"string"
+							],
+							"tags": [
+								{
+									"id": 0,
+									"name": "string"
+								}
+							],
+							"status": "available"
+						}
+					}	
+				],
+				"expected": {
+					"id": 5435435435454,
+					"category": {
+						"id": 0,
+						"name": "string"
+					},
+					"name": "Pes",
+					"photoUrls": [
+						"string"
+					],
+					"tags": [
+						{
+							"id": 0,
+							"name": "string"
+						}
+					],
+					"status": "available"
+				}
+			}
+		]
+	},
 	"/pet/{petId}": {
 		"get": [
 			{

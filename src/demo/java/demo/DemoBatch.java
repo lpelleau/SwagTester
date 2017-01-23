@@ -14,7 +14,7 @@ public class DemoBatch {
 	private static final String fileName = "petstore_modified.json";
 
 	/**
-	 * Montre l'utilisation standard de la librairie sur cas réel. 10 tests de
+	 * Montre l'utilisation standard de la librairie sur cas rï¿½el. 10 tests de
 	 * chaque type sur tout les entrypoints.
 	 */
 	@Test
