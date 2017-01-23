@@ -83,7 +83,7 @@ This project took place in a Software Testing course. The goal of this project i
 		}
 ```
 
-**The exemple above send requests to the requests present in the `pathToFileExpected` file and compare with the expected result**
+**The exemple above send requests to the requests present in the `pathToFileExpected` file and compare with the expected result. You can find a sample [here](https://github.com/lpelleau/SwagTester/blob/master/src/test/resources/results.json)**
 ```Java
 		File pathFile = new File(pathToFile);
 		File pathFileExpected = new File(pathToFileExpected);
