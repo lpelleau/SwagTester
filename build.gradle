@@ -7,9 +7,15 @@
  * user guide available at https://docs.gradle.org/2.7/userguide/tutorial_java_projects.html
  */
 
-// Apply the java plugin to add support for Java
 apply plugin: 'java'
 apply plugin: 'eclipse'
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'SwagTester - Fuzzing Swagger API'
+        attributes 'Implementation-Version': '1.0'
+    }
+}
 
 sourceSets {
 	main {
